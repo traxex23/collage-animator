@@ -1,23 +1,39 @@
-// Character sheets, per-shot stills, and image-to-video clips (+ frame extraction and QA sheets).
+// Character sheets, storyboard sketches, per-shot stills, and image-to-video clips (+ frame extraction and QA sheets).
 import fs from 'node:fs';
 import { ffmpeg, probeDuration } from '../lib/core.mjs';
 import { dir } from '../lib/projects.mjs';
 import { charge, settle, refund } from '../lib/costs.mjs';
 import * as providers from '../providers/index.mjs';
 import { STYLES } from './story.mjs';
+import { compileStill, compileMotion, compileSketch, hash } from './prompts.mjs';
 
-const GRADE = {
-  cool: 'PRESENT DAY: cool, quiet, grey-blue muted near-monochrome palette, soft overcast light, a lonely stillness.',
-  warm: 'MEMORY: warm glowing golden-hour palette, honey, apricot and rose tones, soft light bloom, tender and alive.',
-  none: '',
-};
-const styleOf = p => (STYLES.find(s => s.id === p.settings.style) || STYLES[0]).style;
-const variants = p => Object.fromEntries((p.story?.characters || []).flatMap(c => c.variants.map(v => [v.id, { ...v, name: c.name }])));
+export const styleOf = p => (STYLES.find(s => s.id === p.settings.style) || STYLES[0]).style;
+export const variants = p => Object.fromEntries((p.story?.characters || []).flatMap(c => c.variants.map(v => [v.id, { ...v, name: c.name }])));
 
 export const castFile = (p, vid) => dir(p.slug, 'cast', `${vid}.png`);
+export const sketchFile = (p, sid) => dir(p.slug, 'sketches', `${sid}.png`);
 export const stillFile = (p, sid) => dir(p.slug, 'stills', `${sid}.png`);
 export const clipFile = (p, sid) => dir(p.slug, 'clips', `${sid}.mp4`);
 export const clipSeconds = shot => Math.min(10, Math.max(5, Math.ceil(shot.seconds + 1.5)));
+
+// The exact prompts for a shot, as the UI previews them and the models receive them.
+export function promptsFor(p, shot) {
+  const vs = variants(p), withRefs = shot.cast.some(id => fs.existsSync(castFile(p, id)));
+  return {
+    still: compileStill(shot, { variants: vs, style: styleOf(p), withRefs }),
+    motion: compileMotion(shot),
+    sketch: compileSketch(shot, { variants: vs }),
+  };
+}
+
+// A sketch/still is "stale" when its shot's template changed after it was made.
+const hashFile = f => f.replace(/\.\w+$/, '.hash');
+const markMade = (file, prompt) => fs.writeFileSync(hashFile(file), hash(prompt));
+export function isStale(file, prompt) {
+  if (!fs.existsSync(file)) return false;
+  const h = hashFile(file);
+  return fs.existsSync(h) && fs.readFileSync(h, 'utf8') !== hash(prompt);
+}
 
 // Keep the previous version so a regenerate can be undone.
 function backup(file) { if (fs.existsSync(file)) fs.copyFileSync(file, file.replace(/(\.\w+)$/, '.prev$1')); }
@@ -42,27 +58,26 @@ export async function castSheet(p, vid) {
   fs.writeFileSync(castFile(p, vid), r.buf);
 }
 
-// ---------- stills ----------
-export function stillPrompt(p, shot) {
-  const vs = variants(p);
-  const cast = shot.cast.map((id, i) => `Reference image ${i + 1} shows ${vs[id].name}: ${vs[id].look}`).join('. ');
-  return [
-    cast ? `Use the reference images ONLY for the characters' exact appearance and clothing; draw a brand-new scene. ${cast}.` : '',
-    shot.still_prompt,
-    'Each character appears only once. Keep all heads, hands and key objects fully inside the frame. Correct anatomy and perspective.',
-    GRADE[shot.grade], styleOf(p),
-  ].filter(Boolean).join('\n\n');
+// ---------- storyboard sketches (cheap, plan mode) ----------
+export async function sketch(p, shot) {
+  const prompt = promptsFor(p, shot).sketch;
+  const est = await providers.estimate(p.settings, 'sketch');
+  const r = await paid(p, p.settings.sketch.provider, `sketch ${shot.id}`, est, () => providers.sketchImage(p.settings, prompt));
+  fs.writeFileSync(sketchFile(p, shot.id), r.buf);
+  markMade(sketchFile(p, shot.id), prompt);
 }
 
+// ---------- stills ----------
 export async function still(p, shot) {
   const refs = shot.cast.map(id => castFile(p, id)).filter(f => fs.existsSync(f));
-  const kind = refs.length ? 'edit' : 'image';
-  const est = await providers.estimate(p.settings, kind);
+  const prompt = promptsFor(p, shot).still;
+  const est = await providers.estimate(p.settings, refs.length ? 'edit' : 'image');
   const r = await paid(p, p.settings.image.provider, `still ${shot.id}`, est, () => refs.length
-    ? providers.editImage(p.settings, stillPrompt(p, shot), refs)
-    : providers.generateImage(p.settings, stillPrompt(p, shot)));
+    ? providers.editImage(p.settings, prompt, refs)
+    : providers.generateImage(p.settings, prompt));
   backup(stillFile(p, shot.id));
   fs.writeFileSync(stillFile(p, shot.id), r.buf);
+  markMade(stillFile(p, shot.id), prompt);
 }
 
 // Targeted fix of an existing still ("the bed has two headboards").
@@ -83,15 +98,11 @@ export function undo(file) {
 }
 
 // ---------- clips ----------
-const MOTION_GUARD = 'Keep the exact hand-painted art style, paper texture and colors of the image. Gentle, slow, subtle natural motion like a ' +
-  'hand-drawn 2D animated short film. Locked-off camera or a very slow push-in. Keep faces, hands and anatomy stable and correct. ' +
-  'No new people or objects, no morphing, no text.';
-
 export async function clip(p, shot) {
   const seconds = clipSeconds(shot);
   const est = await providers.estimate(p.settings, 'video', 1, seconds);
   const r = await paid(p, p.settings.video.provider, `clip ${shot.id} (${seconds}s)`, est, () =>
-    providers.video(p.settings, { prompt: `${shot.motion_prompt}\n\n${MOTION_GUARD}`, image: stillFile(p, shot.id), seconds }));
+    providers.video(p.settings, { prompt: promptsFor(p, shot).motion, image: stillFile(p, shot.id), seconds }));
   backup(clipFile(p, shot.id));
   fs.writeFileSync(clipFile(p, shot.id), r.buf);
   await extractFrames(p, shot.id);

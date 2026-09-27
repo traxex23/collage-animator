@@ -43,8 +43,10 @@ export async function chat({ messages }) {
   const theme = (user.match(/THEME: (.*)/) || [])[1] || 'a quiet memory';
   const shots = Array.from({ length: n }, (_, i) => ({
     id: `s${String(i + 1).padStart(2, '0')}`, act: i < 2 ? 1 : i < n - 2 ? 2 : 3, beat: `Mock beat ${i + 1} for ${theme}`, seconds: 6,
-    grade: i >= 2 && i < n - 2 ? 'warm' : 'cool', transition: i === 0 ? 'fade' : i >= 2 && i < n - 2 ? 'knot' : 'bleed',
-    cast: ['hero_old'], still_prompt: `Mock still ${i + 1}: ${theme}`, motion_prompt: 'Gentle breeze, slow breathing.',
+    transition: i === 0 ? 'fade' : i >= 2 && i < n - 2 ? 'knot' : 'bleed', cast: ['hero_old'],
+    frame: { framing: ['wide', 'medium', 'close-up'][i % 3], subject: 'the hero at the centre of the frame', action: `mock action ${i + 1}: ${theme}`,
+      setting: 'a small room by the sea, morning', light: i >= 2 && i < n - 2 ? 'warm memory' : i === n - 1 ? 'golden reveal' : 'cool present',
+      camera: i % 2 ? 'slow push-in' : 'static', motion: 'gentle breeze, slow breathing' },
     sfx: i === 1 ? [{ prompt: 'a soft paper rustle', offset: 1 }] : [], ambience: 'wind',
   }));
   return { text: JSON.stringify({

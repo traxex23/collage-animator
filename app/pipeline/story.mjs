@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { ROOT, extractJson } from '../lib/core.mjs';
 import * as providers from '../providers/index.mjs';
+import { normalizeFrame, gradeOf } from './prompts.mjs';
 
 export const MUSIC = JSON.parse(fs.readFileSync(path.join(ROOT, 'app/presets/music.json'), 'utf8'));
 export const STYLES = JSON.parse(fs.readFileSync(path.join(ROOT, 'app/presets/styles.json'), 'utf8'));
@@ -19,9 +20,9 @@ const RULES = `You are a screenwriter and storyboard artist for short, WORDLESS 
 - Every shot is a single held illustration that will be animated with gentle image-to-video motion (5-10 s). Keep each shot to ONE clear action.
 - Keep characters visually consistent: define each character (and each age they appear at) once, with a precise visual description
   (hair, face, glasses, clothing colours), and list which of those variants appear in each shot (max 3 per shot).
-- still_prompt must describe the full composition: setting, framing (wide / medium / close-up), who is where, the one action, lighting.
-  Keep heads, hands and key objects fully inside the frame. Never put two copies of the same person in one shot.
-- motion_prompt describes only subtle, physically plausible motion for that shot (breathing, a hand lifting a cup, grass in wind).`;
+- Describe each shot with the "frame" template: framing, subject (who is in frame and exactly where), the ONE action, setting
+  (place, time of day, weather), light, camera, and motion (only subtle, physically plausible movement: breathing, a hand lifting a
+  cup, grass in wind). Keep heads, hands and key objects inside the frame. Never put two copies of the same person in one shot.`;
 
 const SCHEMA = `Return ONLY a JSON object with exactly this shape:
 {
@@ -32,15 +33,24 @@ const SCHEMA = `Return ONLY a JSON object with exactly this shape:
   "ambience": { "hill_wind": "prompt for a looping ambience bed", "night_room": "..." },
   "shots": [ {
       "id": "s01", "act": 1, "beat": "what happens and why it matters (1 sentence)", "seconds": 6,
-      "grade": "cool | warm | none", "transition": "fade | cut | bleed | knot",
-      "cast": ["tomas_old"], "still_prompt": "...", "motion_prompt": "...",
+      "transition": "fade | cut | bleed | knot", "cast": ["tomas_old"],
+      "frame": {
+        "framing": "wide | medium | close-up | extreme close-up | over-the-shoulder",
+        "subject": "Tomas stands alone at the right third of the frame, facing the sea",
+        "action": "he lifts the patched red kite off its hook with both hands",
+        "setting": "narrow cottage hallway, grey early morning",
+        "light": "cool present | warm memory | golden reveal | night lamplight",
+        "camera": "static | slow push-in | slow pull-back | slow pan left | slow pan right | tilt up",
+        "motion": "the kite's ribbon tail sways; he breathes slowly"
+      },
       "sfx": [ { "prompt": "short sound effect description", "offset": 1.0 } ],
       "ambience": "hill_wind or null"
   } ],
   "music": { "preset": "one preset id", "shape": [ { "from": 0, "to": 28, "mood": "sparse, lonely" }, { "from": 30, "to": 33, "mood": "silence" } ] }
 }
 Transitions: "fade" soft dissolve; "cut" hard cut for shocks; "bleed" watercolor wash between places/times; "knot" = entering a memory
-(use for each shot that begins a memory). The first shot's transition is ignored. grade "none" for the reveal and the final golden shots.`;
+(use for each shot that begins a memory). The first shot's transition is ignored. Light: "cool present" for today, "warm memory"
+for memories, "night lamplight" for night interiors, "golden reveal" for the reveal and the final shots.`;
 
 const EXAMPLE = `EXAMPLE (abridged) of the level expected - "The Long String": a widower's daily ritual with a patched kite; the shelf holds two
 teacups and he takes one; the kite crashes and tears (inciting accident, music drops to silence); mending it at night he unwinds the
@@ -77,16 +87,19 @@ export function normalize(raw, p) {
     if (seen.has(id)) id = `${id}_${i}`;
     seen.add(id);
     const amb = sh.ambience ? String(sh.ambience).replace(/[^\w-]/g, '_') : null;
-    return {
+    const shot = {
       id, act: Number(sh.act) || 1, beat: String(sh.beat || ''),
       seconds: Math.min(10, Math.max(3, Number(sh.seconds) || 6)),
-      grade: ['cool', 'warm', 'none'].includes(sh.grade) ? sh.grade : 'none',
       transition: TRANSITIONS.includes(sh.transition) ? sh.transition : 'fade',
       cast: (sh.cast || []).map(String).filter(v => variantIds.has(v)).slice(0, 3),
-      still_prompt: String(sh.still_prompt || sh.beat || ''), motion_prompt: String(sh.motion_prompt || 'Gentle subtle motion.'),
+      frame: normalizeFrame(sh.frame, sh),   // old free-text shots are migrated into the template
+      // Shots written before templates existed keep their exact old prompts as overrides.
+      override: { still: String(sh.override?.still || (!sh.frame && sh.still_prompt) || ''), motion: String(sh.override?.motion || (!sh.frame && sh.motion_prompt) || '') },
       sfx: (sh.sfx || []).slice(0, 3).map(x => ({ prompt: String(x.prompt || x), offset: Math.max(0, Number(x.offset) || 0) })),
       ambience: amb && st.ambience[amb] ? amb : null,
     };
+    shot.grade = gradeOf(shot);   // derived from light; the engine uses it for the cool/warm look
+    return shot;
   });
   if (!st.shots.length) throw new Error('The writer returned no shots. Try again or pick another writer model.');
   st.music = { preset: MUSIC.some(m => m.id === st.music?.preset) ? st.music.preset : MUSIC[0].id,

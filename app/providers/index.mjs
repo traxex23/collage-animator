@@ -65,6 +65,7 @@ export async function estimate(settings, kind, n = 1, seconds = 6) {
     case 'writer': return WRITER_CALL_USD * n;
     case 'image': return n * priceFrom(c.image[settings.image.provider] || [], settings.image.model, settings.image.res);
     case 'edit': return n * priceFrom(c.imageEdit[settings.image.provider] || [], settings.image.editModel, settings.image.res);
+    case 'sketch': return n * priceFrom(c.image[settings.sketch.provider] || [], settings.sketch.model, '1K');
     case 'video': return n * seconds * (VIDEO_PER_SEC[settings.video.model] ?? 0.15);
     case 'music': return n * (c.music.venice.find(m => m.id === settings.audio.musicModel)?.price?.generation?.usd ?? 0.1);
     case 'sfx': return n * seconds * (c.sfx.venice.find(m => m.id === settings.audio.sfxModel)?.price?.per_second?.usd ?? 0.003);
@@ -78,6 +79,11 @@ export const chat = (settings, messages, json = true) => pick(settings, settings
 export function generateImage(settings, prompt, { aspect = settings.aspect } = {}) {
   const s = settings.image;
   return pick(settings, s.provider).generateImage({ model: s.model, prompt, aspect, res: s.res });
+}
+// Storyboard sketches: cheapest text-to-image at 1K.
+export function sketchImage(settings, prompt) {
+  const s = settings.sketch;
+  return pick(settings, s.provider).generateImage({ model: s.model, prompt, aspect: settings.aspect, res: '1K' });
 }
 export function editImage(settings, prompt, refs, { aspect = settings.aspect } = {}) {
   const s = settings.image;

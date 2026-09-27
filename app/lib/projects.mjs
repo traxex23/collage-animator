@@ -3,7 +3,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { PROJECTS, slugify } from './core.mjs';
 
-export const STAGES = ['story', 'cast', 'stills', 'clips', 'sound', 'final'];
+// idea (settings) -> plan (story, cast, storyboard) -> make (paintings, clips) -> finish (sound, render)
+export const STAGES = ['plan', 'make', 'finish'];
+const OLD_STAGES = { plan: ['story', 'cast'], make: ['stills', 'clips'], finish: ['sound', 'final'] };
 
 export const DEFAULT_SETTINGS = {
   length: 60,
@@ -13,6 +15,7 @@ export const DEFAULT_SETTINGS = {
   budget: 25,
   writer: { provider: 'xai', model: '' },
   image: { provider: 'venice', model: 'nano-banana-2', editModel: 'nano-banana-2-edit', res: '2K' },
+  sketch: { provider: 'xai', model: 'grok-imagine-image' },
   video: { provider: 'xai', model: 'grok-imagine-video-1.5', res: '720p' },
   audio: { provider: 'venice', musicModel: 'lyria-3-pro', sfxModel: 'elevenlabs-sound-effects-v2' },
 };
@@ -31,7 +34,7 @@ export function listProjects() {
 export function create(theme, settings = {}) {
   let slug = slugify(theme.split(/\s+/).slice(0, 5).join(' ')), n = 2;
   while (fs.existsSync(dir(slug))) slug = `${slugify(theme.split(/\s+/).slice(0, 5).join(' '))}-${n++}`;
-  for (const d of ['', 'cast', 'stills', 'clips', 'frames', 'audio', 'qa', 'out', 'render']) fs.mkdirSync(dir(slug, d), { recursive: true });
+  for (const d of ['', 'cast', 'sketches', 'stills', 'clips', 'frames', 'audio', 'qa', 'out', 'render']) fs.mkdirSync(dir(slug, d), { recursive: true });
   const s = merge(structuredClone(DEFAULT_SETTINGS), settings);
   const p = {
     slug, theme, createdAt: new Date().toISOString(), settings: s,
@@ -45,7 +48,20 @@ export function create(theme, settings = {}) {
 export function load(slug) {
   const f = dir(slug, 'project.json');
   if (!fs.existsSync(f)) throw Object.assign(new Error(`No project ${slug}`), { status: 404 });
-  return JSON.parse(fs.readFileSync(f, 'utf8'));
+  return migrate(JSON.parse(fs.readFileSync(f, 'utf8')));
+}
+
+// Films made with the 6-step version: fold old stages into the 3 new ones, add new settings/folders.
+function migrate(p) {
+  if (!p.stages.plan) {
+    p.stages = Object.fromEntries(STAGES.map(k => [k, {
+      status: OLD_STAGES[k].some(o => p.stages[o]?.status === 'running') ? 'error' : 'idle',
+      approved: OLD_STAGES[k].every(o => p.stages[o]?.approved),
+    }]));
+  }
+  p.settings.sketch ||= structuredClone(DEFAULT_SETTINGS.sketch);
+  fs.mkdirSync(dir(p.slug, 'sketches'), { recursive: true });
+  return p;
 }
 
 export function save(p) {
