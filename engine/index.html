@@ -81,7 +81,8 @@ async function clipFrame(clip, idx) {
 function frameIndex(i, t) {
   const s = TIMELINE.scenes[i], info = CLIPS[s.clip], [a, b] = sceneWindow(i);
   const off = (s.off || 0) * info.fps, avail = (info.frames - off) / info.fps;
-  const rate = Math.min(1, avail / (b - a));
+  // Play near real speed (heavy slow-motion stutters), then hold the last frame; the camera push keeps a hold alive.
+  const rate = Math.max(0.85, Math.min(1, avail / (b - a)));
   return Math.round(clamp(off + (t - a) * rate * info.fps, 0, info.frames - 1));
 }
 

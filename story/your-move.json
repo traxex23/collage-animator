@@ -2,49 +2,178 @@
   "title": "Your Move",
   "logline": "Every afternoon a Filipino grandfather makes one chess move on the porch and knocks on his grandson's door; the boy never looks up from his screen, until the day the knock doesn't come.",
   "characters": [
-    { "id": "lolo", "name": "Lolo Ben", "kind": "character", "variants": [
-      { "id": "lolo_now", "look": "A thin Filipino grandfather of 78 with warm brown skin, short neat white hair, a thin white moustache, deep kind smile lines, thick black-rimmed reading glasses hanging on a black cord around his neck. Open short-sleeved light-blue polo shirt over a white sando undershirt, brown slacks, dark blue rubber tsinelas slippers. Stands upright, gentle posture." },
-      { "id": "lolo_frail", "look": "The same Filipino grandfather two years older and frail: thinner face and arms, slightly stooped, hair a little thinner, the same thick black-rimmed glasses on a black cord, the same open light-blue short-sleeved polo over a white sando, brown slacks, dark blue rubber tsinelas." },
-      { "id": "lolo_memory", "look": "The same Filipino grandfather about ten years younger, around 68: fuller face, salt-and-pepper short hair, darker moustache, strong arms, the same thick black-rimmed glasses on a black cord, the same style open light-blue short-sleeved polo over a white sando, brown slacks." }
-    ] },
-    { "id": "migo", "name": "Migo", "kind": "character", "variants": [
-      { "id": "migo_13", "look": "A slim Filipino boy of 13 with short messy black hair and light brown skin, a big black over-ear gaming headset, an oversized charcoal-grey hoodie with the sleeves pulled over his wrists, black basketball shorts." },
-      { "id": "migo_8", "look": "The same Filipino boy at 8: short messy black hair, round face, a gap-toothed grin, a red-and-white horizontally striped t-shirt, blue shorts." },
-      { "id": "migo_5", "look": "The same Filipino boy at 5: round chubby cheeks, short black hair, a plain yellow t-shirt, small blue shorts." }
-    ] },
-    { "id": "house", "name": "Lolo's house", "kind": "place", "variants": [
-      { "id": "house_ext", "look": "An old two-storey Filipino house on a quiet barangay street: concrete ground floor painted pale mint green, a wooden upper floor with capiz-shell sliding windows, a galvanized corrugated roof, a small front porch with a wooden railing on the ground floor, a magenta bougainvillea climbing the low front gate, a narrow street with a utility pole and wires. The upstairs right window is the grandson's room." }
-    ] },
-    { "id": "porch", "name": "the porch", "kind": "place", "variants": [
-      { "id": "porch", "look": "The front porch (balkonahe) of an old Filipino house: dark narra wood floorboards, a wooden railing, two rattan armchairs facing each other with a low square wooden side table between them holding a wooden chessboard; the grandfather's chair is on the LEFT, the grandson's empty chair on the RIGHT. Capiz-shell sliding windows behind, a potted magenta bougainvillea in the corner, a woven banig mat hanging on the wall." }
-    ] },
-    { "id": "hallway", "name": "the upstairs hallway", "kind": "place", "variants": [
-      { "id": "hallway", "look": "A narrow upstairs hallway of an old Filipino house: polished dark wooden floorboards, pale wooden wall panels, warm window light at the far end of the hall; on the RIGHT wall the grandson's closed bedroom door, dark brown wood with a few faded colourful game stickers, and cold blue light leaking from the gap under the door." }
-    ] },
-    { "id": "migo_room", "name": "Migo's room", "kind": "place", "variants": [
-      { "id": "migo_room", "look": "A teenage boy's small bedroom with the curtains shut, almost dark: a desk against the wall with one wide computer monitor glowing cyan and violet, a glowing RGB keyboard and mouse, a gaming chair, faded game posters on the wall, an unmade bed, cables. The door is behind the chair, slightly ajar." }
-    ] },
-    { "id": "lolo_room", "name": "Lolo's room", "kind": "place", "variants": [
-      { "id": "lolo_room", "look": "An old Filipino grandfather's simple bedroom: a single wooden bed with a plain white cover, a small wooden altar shelf with a Santo Niño figure and a folded rosary, a capiz-shell window with soft daylight, a tall wooden aparador wardrobe, a calendar on the wall with no readable text, a woven rattan chair." }
-    ] },
-    { "id": "chessboard", "name": "the chessboard", "kind": "prop", "variants": [
-      { "id": "chessboard", "look": "An old worn wooden chessboard with faded squares and worn edges, and old wooden chess pieces mid-game; the white knight has a small chipped ear. Some pieces already captured sit beside the board." }
-    ] },
-    { "id": "tin", "name": "the cookie tin", "kind": "prop", "variants": [
-      { "id": "tin", "look": "A round royal-blue Danish-style butter-cookie tin with a slightly dented lid, the kind Filipino homes reuse for sewing things, open and full to the brim with old coins, pesos and centavos." }
-    ] },
-    { "id": "phone", "name": "Lolo's phone", "kind": "prop", "variants": [
-      { "id": "phone", "look": "A small old Android smartphone with a black plastic case and a cracked top-right corner of the screen." }
-    ] }
+    {
+      "id": "lolo",
+      "name": "Lolo Ben",
+      "kind": "character",
+      "variants": [
+        {
+          "id": "lolo_now",
+          "look": "A thin Filipino grandfather of 78 with warm brown skin, short neat white hair, a thin white moustache, deep kind smile lines, thick black-rimmed reading glasses hanging on a black cord around his neck. Open short-sleeved light-blue polo shirt over a white sando undershirt, brown slacks, dark blue rubber tsinelas slippers. Stands upright, gentle posture."
+        },
+        {
+          "id": "lolo_frail",
+          "look": "The same Filipino grandfather two years older and frail: thinner face and arms, slightly stooped, hair a little thinner, the same thick black-rimmed glasses on a black cord, the same open light-blue short-sleeved polo over a white sando, brown slacks, dark blue rubber tsinelas."
+        },
+        {
+          "id": "lolo_memory",
+          "look": "The SAME slim Filipino man as the 78-year-old grandfather, with the same face, the same long gentle face shape, the same thin build and narrow shoulders, only about ten years younger (around 68): salt-and-pepper short hair, a grey-and-black thin moustache, fewer wrinkles, standing straight. The same thick black-rimmed glasses on a black cord, the same open light-blue short-sleeved polo over a white sando, brown slacks, dark blue rubber tsinelas. NOT heavier, NOT a different man."
+        }
+      ]
+    },
+    {
+      "id": "migo",
+      "name": "Migo",
+      "kind": "character",
+      "variants": [
+        {
+          "id": "migo_13",
+          "look": "A slim Filipino boy of 13 with short messy black hair and light brown skin, a big black over-ear gaming headset, an oversized charcoal-grey hoodie with the sleeves pulled over his wrists, black basketball shorts."
+        },
+        {
+          "id": "migo_8",
+          "look": "The same Filipino boy at 8: short messy black hair, round face, a gap-toothed grin, a red-and-white horizontally striped t-shirt, blue shorts."
+        },
+        {
+          "id": "migo_5",
+          "look": "The same Filipino boy at 5: round chubby cheeks, short black hair, a plain yellow t-shirt, small blue shorts."
+        },
+        {
+          "id": "migo_11",
+          "look": "The same Filipino boy at 11: short messy black hair, light brown skin, a bright open smile, a plain white t-shirt with a small blue print, khaki shorts."
+        },
+        {
+          "id": "migo_2",
+          "look": "The same Filipino boy as a chubby toddler of 2: soft fine black hair, round cheeks, a tiny white sando and small cloth shorts, barefoot."
+        }
+      ]
+    },
+    {
+      "id": "house",
+      "name": "Lolo's house",
+      "kind": "place",
+      "variants": [
+        {
+          "id": "house_ext",
+          "look": "An old two-storey Filipino house on a quiet barangay street: concrete ground floor painted pale mint green, a wooden upper floor with capiz-shell sliding windows, a galvanized corrugated roof, a small front porch with a wooden railing on the ground floor, a magenta bougainvillea climbing the low front gate, a narrow street with a utility pole and wires. The upstairs right window is the grandson's room."
+        }
+      ]
+    },
+    {
+      "id": "porch",
+      "name": "the porch",
+      "kind": "place",
+      "variants": [
+        {
+          "id": "porch",
+          "look": "The front porch (balkonahe) of an old Filipino house: dark narra wood floorboards, a wooden railing, two rattan armchairs facing each other with a low square wooden side table between them holding a wooden chessboard; the grandfather's chair is on the LEFT, the grandson's empty chair on the RIGHT. Capiz-shell sliding windows behind, a potted magenta bougainvillea in the corner, a woven banig mat hanging on the wall."
+        }
+      ]
+    },
+    {
+      "id": "hallway",
+      "name": "the upstairs hallway",
+      "kind": "place",
+      "variants": [
+        {
+          "id": "hallway",
+          "look": "A narrow upstairs hallway of an old Filipino house: polished dark wooden floorboards, pale wooden wall panels, warm window light at the far end of the hall; on the RIGHT wall the grandson's closed bedroom door, dark brown wood with a few faded colourful game stickers, and cold blue light leaking from the gap under the door."
+        }
+      ]
+    },
+    {
+      "id": "migo_room",
+      "name": "Migo's room",
+      "kind": "place",
+      "variants": [
+        {
+          "id": "migo_room",
+          "look": "A teenage boy's small bedroom with the curtains shut, almost dark: a desk against the wall with one wide computer monitor glowing cyan and violet, a glowing RGB keyboard and mouse, a gaming chair, faded game posters on the wall, an unmade bed, cables. The door is behind the chair, slightly ajar."
+        }
+      ]
+    },
+    {
+      "id": "lolo_room",
+      "name": "Lolo's room",
+      "kind": "place",
+      "variants": [
+        {
+          "id": "lolo_room",
+          "look": "An old Filipino grandfather's simple bedroom: a single wooden bed with a plain white cover, a small wooden altar shelf with a Santo Niño figure and a folded rosary, a capiz-shell window with soft daylight, a tall wooden aparador wardrobe, a calendar on the wall with no readable text, a woven rattan chair."
+        }
+      ]
+    },
+    {
+      "id": "chessboard",
+      "name": "the chessboard",
+      "kind": "prop",
+      "variants": [
+        {
+          "id": "chessboard",
+          "look": "An old worn wooden chessboard with faded squares and worn edges, and old wooden chess pieces mid-game; the white knight has a small chipped ear. Some pieces already captured sit beside the board."
+        }
+      ]
+    },
+    {
+      "id": "tin",
+      "name": "the cookie tin",
+      "kind": "prop",
+      "variants": [
+        {
+          "id": "tin",
+          "look": "A round royal-blue Danish-style butter-cookie tin with a slightly dented lid, the kind Filipino homes reuse for sewing things, open and full to the brim with old coins, pesos and centavos."
+        }
+      ]
+    },
+    {
+      "id": "phone",
+      "name": "Lolo's phone",
+      "kind": "prop",
+      "variants": [
+        {
+          "id": "phone",
+          "look": "A small old Android smartphone with a black plastic case and a cracked top-right corner of the screen."
+        }
+      ]
+    }
   ],
   "palette": {
-    "lolo afternoon": { "grade": "none", "words": "Late-afternoon Filipino sunlight through capiz-shell windows: warm amber and honey light, long soft shadows, floating dust, narra-brown wood, bougainvillea magenta and faded teal accents." },
-    "screen glow": { "grade": "cool", "words": "A dark room lit only by a computer monitor: cold cyan and violet light on the face and walls, deep blue-black shadows; any warm light is only a thin sliver from the doorway." },
-    "split light": { "grade": "none", "words": "Warm amber hallway light on one side and cold blue screen light leaking from under the door on the other: the two lights meet but do not mix." },
-    "rainy season": { "grade": "cool", "words": "Rainy-season afternoon: soft grey-green diffused light, rain streaks on the capiz windows, damp dark wood, the amber faded and quiet." },
-    "absence": { "grade": "cool", "words": "Overcast dusk after a loss: the warm colours drained to grey-sepia, the bougainvillea dull, soft flat light, one small candle flame the only warmth." },
-    "memory haze": { "grade": "warm", "words": "MEMORY: soft golden haze, slightly overexposed, glowing mango-gold and warm pink tones, gentle light bloom at the edges, tender and alive." },
-    "sunset": { "grade": "none", "words": "Filipino sunset: deep amber and rose-gold light flooding the scene, long warm shadows, a coral and lavender sky, peaceful and still." }
+    "lolo afternoon": {
+      "grade": "none",
+      "words": "Late-afternoon Filipino sunlight through capiz-shell windows: warm amber and honey light, long soft shadows, floating dust, narra-brown wood, bougainvillea magenta and faded teal accents."
+    },
+    "screen glow": {
+      "grade": "cool",
+      "words": "A dark room lit only by a computer monitor: cold cyan and violet light on the face and walls, deep blue-black shadows; any warm light is only a thin sliver from the doorway."
+    },
+    "split light": {
+      "grade": "none",
+      "words": "Warm amber hallway light on one side and cold blue screen light leaking from under the door on the other: the two lights meet but do not mix."
+    },
+    "rainy season": {
+      "grade": "cool",
+      "words": "Rainy-season afternoon: soft grey-green diffused light, rain streaks on the capiz windows, damp dark wood, the amber faded and quiet."
+    },
+    "absence": {
+      "grade": "cool",
+      "words": "Overcast dusk after a loss: the warm colours drained to grey-sepia, the bougainvillea dull, soft flat light, one small candle flame the only warmth."
+    },
+    "memory haze": {
+      "grade": "warm",
+      "words": "MEMORY: soft golden haze, slightly overexposed, glowing mango-gold and warm pink tones, gentle light bloom at the edges, tender and alive."
+    },
+    "sunset": {
+      "grade": "none",
+      "words": "Filipino sunset: deep amber and rose-gold light flooding the scene, long warm shadows, a coral and lavender sky, peaceful and still."
+    },
+    "ambulance night": {
+      "grade": "cool",
+      "words": "Night: a dark bedroom lit by the cold screen, while slow pulses of red and blue emergency light sweep across the wall, the ceiling and the gap under the door."
+    },
+    "wake": {
+      "grade": "none",
+      "words": "A Filipino wake (lamay) at night inside the home: dim warm candlelight and soft yellow bulbs, white flowers, hushed heavy stillness, faces in soft shadow."
+    }
   },
   "ambience": {
     "street_afternoon": "Quiet Filipino neighbourhood afternoon: distant roosters, a tricycle passing far away, a faint AM radio playing from a neighbour's house, light breeze.",
@@ -53,92 +182,776 @@
     "rain_roof": "Steady tropical rain on a galvanized tin roof, dripping gutters, soft thunder far away.",
     "dusk_empty": "Empty dusk: soft wind, a few crickets, a distant dog barking once, a very quiet house.",
     "fiesta": "A small-town Filipino fiesta at night: a distant brass marching band, children laughing, crowd murmur, far away and warm.",
-    "evening_birds": "Filipino evening: birds settling in the trees, a gentle breeze, a very distant church bell."
+    "evening_birds": "Filipino evening: birds settling in the trees, a gentle breeze, a very distant church bell.",
+    "wake_night": "A Filipino wake at night: hushed murmuring voices far off, crickets outside, a ceiling fan, the soft crackle of candles.",
+    "night_room": "A quiet bedroom at night: a wall clock ticking, geckos chirping outside, very faint crickets."
   },
   "plants": [
-    { "object": "the chipped white knight Lolo holds up at the door", "setup_shot": "s03", "payoff_shot": "s15" },
-    { "object": "the empty right-hand rattan chair", "setup_shot": "s02", "payoff_shot": "s15" },
-    { "object": "blue light under the door and the fading knock", "setup_shot": "s03", "payoff_shot": "s07" },
-    { "object": "Migo's gaming headset", "setup_shot": "s04", "payoff_shot": "s12" },
-    { "object": "the glowing upstairs window", "setup_shot": "s01", "payoff_shot": "s16" }
+    {
+      "object": "the chipped white knight Lolo holds up at the door",
+      "setup_shot": "s03",
+      "payoff_shot": "s15"
+    },
+    {
+      "object": "the empty right-hand rattan chair",
+      "setup_shot": "s02",
+      "payoff_shot": "s15"
+    },
+    {
+      "object": "blue light under the door and the fading knock",
+      "setup_shot": "s03",
+      "payoff_shot": "s07"
+    },
+    {
+      "object": "Migo's gaming headset",
+      "setup_shot": "s04",
+      "payoff_shot": "s12"
+    },
+    {
+      "object": "the glowing upstairs window",
+      "setup_shot": "s01",
+      "payoff_shot": "s16"
+    },
+    {
+      "object": "one coin into the blue tin each day",
+      "setup_shot": "s02a",
+      "payoff_shot": "s12"
+    },
+    {
+      "object": "Migo's cracked, taped headset",
+      "setup_shot": "s04a",
+      "payoff_shot": "s12"
+    },
+    {
+      "object": "Lolo at night, lit blue by his phone",
+      "setup_shot": "s05a",
+      "payoff_shot": "s13"
+    },
+    {
+      "object": "Lolo gave Migo his first tablet",
+      "setup_shot": "s08a",
+      "payoff_shot": "s13"
+    },
+    {
+      "object": "one coin into the blue tin each day",
+      "setup_shot": "s02a",
+      "payoff_shot": "s12"
+    },
+    {
+      "object": "Migo's cracked, taped headset",
+      "setup_shot": "s04a",
+      "payoff_shot": "s12"
+    },
+    {
+      "object": "Lolo at night, lit blue by his phone",
+      "setup_shot": "s05a",
+      "payoff_shot": "s13"
+    },
+    {
+      "object": "Lolo gave Migo his first tablet",
+      "setup_shot": "s08a",
+      "payoff_shot": "s13"
+    }
   ],
   "shots": [
-    { "id": "s01", "act": 1, "seconds": 6, "transition": "fade", "cast": ["house_ext"],
+    {
+      "id": "s01",
+      "act": 1,
       "beat": "Two worlds under one roof: the warm porch below, the cold blue window above.",
-      "frame": { "framing": "wide", "subject": "The old two-storey house seen from across the quiet street, centred, with the small porch below glowing warm and the upstairs right capiz window glowing cold blue", "action": "a quiet ordinary afternoon; nobody on the street", "setting": "a quiet Filipino barangay street, late afternoon, clear sky, a utility pole and wires at the left edge", "light": "lolo afternoon", "camera": "slow push-in", "motion": "the bougainvillea sways gently, a few leaves drift across the street, the blue window light flickers faintly" },
-      "sfx": [], "ambience": "street_afternoon" },
-    { "id": "s02", "act": 1, "seconds": 5, "transition": "fade", "cast": ["porch", "chessboard", "lolo_now"],
+      "seconds": 7,
+      "transition": "fade",
+      "cast": [
+        "house_ext"
+      ],
+      "frame": {
+        "framing": "wide",
+        "subject": "The old two-storey house seen from across the quiet street, centred, with the small porch below glowing warm and the upstairs right capiz window glowing cold blue",
+        "action": "a quiet ordinary afternoon; nobody on the street",
+        "setting": "a quiet Filipino barangay street, late afternoon, clear sky, a utility pole and wires at the left edge",
+        "light": "lolo afternoon",
+        "camera": "slow push-in",
+        "motion": "the bougainvillea sways gently, a few leaves drift across the street, the blue window light flickers faintly"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [],
+      "ambience": "street_afternoon"
+    },
+    {
+      "id": "s02",
+      "act": 1,
       "beat": "Lolo makes his move and turns the board toward the empty chair, an invitation.",
-      "frame": { "framing": "close-up", "subject": "The chessboard on the low table between the two rattan chairs; Lolo's weathered brown hand and light-blue polo sleeve enter from the LEFT; the empty rattan chair on the RIGHT, softly out of focus", "action": "his fingers set the chipped white knight down on a new square", "setting": "the front porch, late afternoon, capiz windows behind", "light": "lolo afternoon", "camera": "static", "motion": "his fingers gently place the knight and lift away; dust floats in the sunbeam" },
-      "sfx": [{ "prompt": "a single wooden chess piece set down on a wooden board, a soft click", "offset": 1.5 }], "ambience": "street_afternoon" },
-    { "id": "s03", "act": 1, "seconds": 6, "transition": "fade", "cast": ["hallway", "lolo_now"],
+      "seconds": 6,
+      "transition": "fade",
+      "cast": [
+        "porch",
+        "chessboard",
+        "lolo_now"
+      ],
+      "frame": {
+        "framing": "close-up",
+        "subject": "The chessboard on the low table between the two rattan chairs; Lolo's weathered brown hand and light-blue polo sleeve enter from the LEFT; the empty rattan chair on the RIGHT, softly out of focus",
+        "action": "his fingers set the chipped white knight down on a new square",
+        "setting": "the front porch, late afternoon, capiz windows behind",
+        "light": "lolo afternoon",
+        "camera": "static",
+        "motion": "his fingers gently set the small white knight down on one square and lift away; every other chess piece stays exactly where it is and exactly the same size, nothing grows or changes; dust floats in the sunbeam"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [
+        {
+          "prompt": "a single wooden chess piece set down on a wooden board, a soft click",
+          "offset": 1.5
+        }
+      ],
+      "ambience": "street_afternoon"
+    },
+    {
+      "id": "s02a",
+      "act": 1,
+      "seconds": 5,
+      "transition": "fade",
+      "cast": [
+        "lolo_room",
+        "lolo_now",
+        "tin"
+      ],
+      "beat": "His other daily ritual: one coin into the blue tin.",
+      "frame": {
+        "framing": "close-up",
+        "subject": "Lolo's hand on the LEFT dropping a single coin into the open royal-blue cookie tin that sits on the small wooden altar shelf, beside a Santo Niño figure",
+        "action": "he drops one coin into the tin, already half full of coins",
+        "setting": "Lolo's bedroom, afternoon light through the capiz window",
+        "light": "lolo afternoon",
+        "camera": "static",
+        "motion": "the coin falls from his fingers into the tin and settles; his hand rests on the lid for a moment"
+      },
+      "sfx": [
+        {
+          "prompt": "a single coin dropped into a metal cookie tin full of coins, a small bright clink",
+          "offset": 1.2
+        }
+      ],
+      "ambience": "house_quiet"
+    },
+    {
+      "id": "s03",
+      "act": 1,
       "beat": "The first knock: Lolo, hopeful and playful, holds up the knight at his grandson's door.",
-      "frame": { "framing": "medium", "subject": "Lolo standing on the LEFT side of the narrow hallway, turned toward the closed bedroom door on the RIGHT wall, head and full upper body in frame", "action": "he knocks with his knuckles and holds up the chipped white knight beside his smiling face, playful and hopeful", "setting": "the upstairs hallway, warm window light behind him at the far end, cold blue light under the door", "light": "split light", "camera": "static", "motion": "his knuckles tap the door twice, a small hopeful smile, a slight lean toward the door" },
-      "sfx": [{ "prompt": "two soft friendly knocks on a wooden bedroom door", "offset": 1.0 }], "ambience": "house_quiet" },
-    { "id": "s04", "act": 1, "seconds": 5, "transition": "cut", "cast": ["migo_room", "migo_13", "lolo_now"],
+      "seconds": 6,
+      "transition": "fade",
+      "cast": [
+        "hallway",
+        "lolo_now"
+      ],
+      "frame": {
+        "framing": "medium",
+        "subject": "Lolo standing on the LEFT side of the narrow hallway, turned toward the closed bedroom door on the RIGHT wall, head and full upper body in frame",
+        "action": "he knocks with his knuckles and holds up the chipped white knight beside his smiling face, playful and hopeful",
+        "setting": "the upstairs hallway, warm window light behind him at the far end, cold blue light under the door",
+        "light": "split light",
+        "camera": "static",
+        "motion": "his knuckles tap the door twice, a small hopeful smile, a slight lean toward the door"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [
+        {
+          "prompt": "two soft friendly knocks on a wooden bedroom door",
+          "offset": 1
+        }
+      ],
+      "ambience": "house_quiet"
+    },
+    {
+      "id": "s04",
+      "act": 1,
       "beat": "Migo doesn't look up. Later.",
-      "frame": { "framing": "over-the-shoulder", "subject": "From behind Migo's right shoulder: Migo seated at the desk on the RIGHT with the headset on, face lit cyan by the monitor; in the background on the LEFT, the door is ajar and Lolo stands small in the warm doorway light holding up the knight", "action": "without turning, Migo lifts one hand in a quick 'later' wave while staring at the screen", "setting": "Migo's dark bedroom, curtains shut, the monitor glowing", "light": "screen glow", "camera": "static", "motion": "Migo's hand lifts and drops, the screen light flickers on his face; in the doorway Lolo slowly lowers the knight" },
-      "sfx": [], "ambience": "gaming_room" },
-    { "id": "s05", "act": 1, "seconds": 5, "transition": "bleed", "cast": ["porch", "lolo_frail", "chessboard"],
+      "seconds": 6,
+      "transition": "cut",
+      "cast": [
+        "migo_room",
+        "migo_13",
+        "lolo_now"
+      ],
+      "frame": {
+        "framing": "over-the-shoulder",
+        "subject": "Seen from behind Migo's right shoulder: Migo seated at his desk in the RIGHT half of the frame, headset on, facing the glowing monitor. Far behind him on the LEFT, OUTSIDE the room, the bedroom door stands half open onto the warm hallway, and Lolo stands small in that doorway, not entering, holding up a white chess knight piece",
+        "action": "without turning away from the screen, Migo lifts one hand in a small brushing-off 'later' gesture toward the door behind him",
+        "setting": "Migo's dark bedroom, curtains shut, the monitor glowing",
+        "light": "screen glow",
+        "camera": "static",
+        "motion": "Migo's hand lifts and drops, the screen light flickers on his face; in the doorway Lolo slowly lowers the knight"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [],
+      "ambience": "gaming_room"
+    },
+    {
+      "id": "s04a",
+      "act": 1,
+      "seconds": 4,
+      "transition": "cut",
+      "cast": [
+        "migo_13",
+        "migo_room"
+      ],
+      "beat": "Migo's headset is broken, held together with tape.",
+      "frame": {
+        "framing": "extreme close-up",
+        "subject": "The band of Migo's black gaming headset on his head, cracked and wrapped with grey tape, seen from the side, his messy black hair around it",
+        "action": "he presses the loose ear cup against his ear because the sound keeps cutting out",
+        "setting": "his dark bedroom, the monitor glow behind",
+        "light": "screen glow",
+        "camera": "static",
+        "motion": "his fingers press the ear cup, the taped band flexes slightly, screen light flickers"
+      },
+      "sfx": [],
+      "ambience": "gaming_room"
+    },
+    {
+      "id": "s05",
+      "act": 1,
       "beat": "Time passes. The rainy season. Lolo, now with a cane, keeps the game going alone.",
-      "frame": { "framing": "wide", "subject": "Lolo seated in his rattan chair on the LEFT, a wooden cane leaning against the chair, the chessboard on the low table, the grandson's chair on the RIGHT empty", "action": "he slowly reaches out and moves a white piece", "setting": "the front porch during heavy afternoon rain, rain streaking the capiz windows and falling past the railing", "light": "rainy season", "camera": "static", "motion": "steady rain falls past the railing, his slow hand moves the piece, his shoulders rise with a breath" },
-      "sfx": [], "ambience": "rain_roof" },
-    { "id": "s06", "act": 1, "seconds": 5, "transition": "fade", "cast": ["hallway", "lolo_frail"],
+      "seconds": 6,
+      "transition": "bleed",
+      "cast": [
+        "porch",
+        "lolo_frail",
+        "chessboard"
+      ],
+      "frame": {
+        "framing": "wide",
+        "subject": "Lolo seated in his rattan chair on the LEFT, a wooden cane leaning against the chair, the chessboard on the low table, the grandson's chair on the RIGHT empty",
+        "action": "he slowly reaches out and moves a white piece",
+        "setting": "the front porch during heavy afternoon rain, rain streaking the capiz windows and falling past the railing",
+        "light": "rainy season",
+        "camera": "static",
+        "motion": "steady rain falls past the railing, his slow hand moves the piece, his shoulders rise with a breath"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [],
+      "ambience": "rain_roof"
+    },
+    {
+      "id": "s05a",
+      "act": 1,
+      "seconds": 7,
+      "transition": "bleed",
+      "cast": [
+        "lolo_room",
+        "lolo_frail",
+        "phone"
+      ],
+      "beat": "Night: Lolo, alone, lit blue by his phone like his grandson. (We don't know yet what he's doing.)",
+      "frame": {
+        "framing": "medium",
+        "subject": "Frail Lolo sitting up in his bed on the LEFT, reading glasses on the tip of his nose, holding his old phone close to his face with both hands",
+        "action": "he slowly pokes the screen with one finger, squinting, concentrating",
+        "setting": "his dark bedroom at night, only the altar candle and the phone light",
+        "light": "screen glow",
+        "camera": "slow push-in",
+        "motion": "his finger taps the screen slowly, he squints and leans closer, the phone light flickers on his face"
+      },
+      "sfx": [],
+      "ambience": "night_room"
+    },
+    {
+      "id": "s06",
+      "act": 1,
       "beat": "The third knock is only a tap. The door stays shut.",
-      "frame": { "framing": "medium", "subject": "Frail Lolo seated in a simple old wheelchair on the LEFT of the hallway, facing the closed bedroom door on the RIGHT wall", "action": "he lifts the chipped white knight weakly and taps the door once with it", "setting": "the upstairs hallway, dimmer than before, cold blue light still leaking from under the door", "light": "split light", "camera": "static", "motion": "his thin arm rises slowly and taps once, trembling slightly, then lowers into his lap" },
-      "sfx": [{ "prompt": "one faint single tap of a small wooden object on a door", "offset": 1.8 }], "ambience": "house_quiet" },
-    { "id": "s07", "act": 2, "seconds": 6, "transition": "cut", "cast": ["migo_room", "migo_13"],
+      "seconds": 6,
+      "transition": "fade",
+      "cast": [
+        "hallway",
+        "lolo_frail"
+      ],
+      "frame": {
+        "framing": "medium",
+        "subject": "Frail Lolo seated in a simple old wheelchair on the LEFT of the hallway, facing the closed bedroom door on the RIGHT wall",
+        "action": "he lifts the chipped white knight weakly and taps the door once with it",
+        "setting": "the upstairs hallway, dimmer than before, cold blue light still leaking from under the door",
+        "light": "split light",
+        "camera": "static",
+        "motion": "his thin arm rises slowly and taps once, trembling slightly, then lowers into his lap"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [
+        {
+          "prompt": "one faint single tap of a small wooden object on a door",
+          "offset": 1.8
+        }
+      ],
+      "ambience": "house_quiet"
+    },
+    {
+      "id": "s06a",
+      "act": 1,
+      "seconds": 5,
+      "transition": "cut",
+      "cast": [
+        "migo_room",
+        "migo_13"
+      ],
+      "beat": "The near-miss: he almost goes to the door.",
+      "frame": {
+        "framing": "medium",
+        "subject": "Migo at his desk on the RIGHT, the door behind him on the LEFT",
+        "action": "he lifts the headset off one ear and half-turns toward the door, hesitates, then turns back to the screen and puts the headset back on",
+        "setting": "his dark bedroom, the monitor glowing",
+        "light": "screen glow",
+        "camera": "static",
+        "motion": "his hand lifts the ear cup, his head half-turns toward the door, pauses, then he turns back to the screen"
+      },
+      "sfx": [],
+      "ambience": "gaming_room"
+    },
+    {
+      "id": "s06b",
+      "act": 2,
+      "seconds": 6,
+      "transition": "cut",
+      "cast": [
+        "migo_room",
+        "migo_13"
+      ],
+      "beat": "The night Lolo is taken away. Migo, headset on, never notices.",
+      "frame": {
+        "framing": "wide",
+        "subject": "Migo seated at his desk on the RIGHT with the headset on, absorbed in the glowing monitor; the closed door on the LEFT",
+        "action": "he keeps playing while red and blue emergency lights pulse through the curtains and under the door behind him",
+        "setting": "his dark bedroom late at night",
+        "light": "ambulance night",
+        "camera": "static",
+        "motion": "slow pulses of red and blue light sweep across the walls and under the door, Migo keeps playing, unaware"
+      },
+      "sfx": [
+        {
+          "prompt": "a distant ambulance siren heard muffled through closed windows, fading away",
+          "offset": 0.5
+        }
+      ],
+      "ambience": "gaming_room"
+    },
+    {
+      "id": "s07",
+      "act": 2,
       "beat": "Silence. The knocking stopped days ago and he only now notices.",
-      "frame": { "framing": "close-up", "subject": "Migo's face and shoulders, turned three-quarters toward the door on the LEFT, one side of the headset slid off his ear", "action": "he pauses his game, slides the headset off one ear and stares at the door: no shadow, no light, no knock", "setting": "his dark bedroom, the monitor glow on his face, the door behind in shadow", "light": "screen glow", "camera": "slow push-in", "motion": "his hand slowly slides the headset off one ear, his eyes turn toward the door and hold, a slow blink" },
-      "sfx": [], "ambience": "gaming_room" },
-    { "id": "s08", "act": 2, "seconds": 5, "transition": "cut", "cast": ["porch", "chessboard"],
+      "seconds": 8,
+      "transition": "cut",
+      "cast": [
+        "migo_room",
+        "migo_13"
+      ],
+      "frame": {
+        "framing": "close-up",
+        "subject": "Migo's face and shoulders, turned three-quarters toward the door on the LEFT, one side of the headset slid off his ear",
+        "action": "he pauses his game, slides the headset off one ear and stares at the door: no shadow, no light, no knock",
+        "setting": "his dark bedroom, the monitor glow on his face, the door behind in shadow",
+        "light": "screen glow",
+        "camera": "slow push-in",
+        "motion": "his hand slowly slides the headset off one ear, his eyes turn toward the door and hold, a slow blink"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [],
+      "ambience": "gaming_room"
+    },
+    {
+      "id": "s07a",
+      "act": 2,
+      "seconds": 8,
+      "transition": "fade",
+      "cast": [
+        "migo_13",
+        "lolo_now"
+      ],
+      "beat": "The wake. There is no doubt now: Lolo is gone.",
+      "frame": {
+        "framing": "medium",
+        "subject": "Migo in a plain black t-shirt standing in the RIGHT third, seen from behind at a slight angle, holding his headset limply in one hand; in front of him on a small table, a framed photograph of Lolo smiling with a black ribbon across the frame's corner",
+        "action": "he stands very still in front of the photo",
+        "setting": "the living room of the old house at night during a wake: two tall white candles and white chrysanthemums beside the photo, the edge of a simple white casket behind the table, a few blurred mourners in white seated far in the background",
+        "light": "wake",
+        "camera": "slow push-in",
+        "motion": "the candle flames flicker, Migo stays still, his hand holding the headset trembles slightly"
+      },
+      "sfx": [],
+      "ambience": "wake_night"
+    },
+    {
+      "id": "s08",
+      "act": 2,
       "beat": "Absence: the empty chair, his glasses on the board, candles for the wake.",
-      "frame": { "framing": "wide", "subject": "The two empty rattan chairs facing each other; on the chessboard lie Lolo's folded black-rimmed reading glasses on their cord; a white candle and white chrysanthemums on the capiz window ledge behind", "action": "nothing moves but the candle flame", "setting": "the front porch at overcast dusk, the day after", "light": "absence", "camera": "static", "motion": "the candle flame flickers, a faint breeze stirs the chrysanthemums" },
-      "sfx": [], "ambience": "dusk_empty" },
-    { "id": "s09", "act": 2, "seconds": 5, "transition": "bleed", "cast": ["porch", "lolo_memory", "migo_8"],
+      "seconds": 7,
+      "transition": "cut",
+      "cast": [
+        "porch",
+        "chessboard"
+      ],
+      "frame": {
+        "framing": "wide",
+        "subject": "The two empty rattan chairs facing each other; on the chessboard lie Lolo's folded black-rimmed reading glasses on their cord; a white candle and white chrysanthemums on the capiz window ledge behind",
+        "action": "nothing moves but the candle flame",
+        "setting": "the front porch at overcast dusk, the day after",
+        "light": "absence",
+        "camera": "static",
+        "motion": "the candle flame flickers, a faint breeze stirs the chrysanthemums"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [],
+      "ambience": "dusk_empty"
+    },
+    {
+      "id": "s08a",
+      "act": 2,
+      "seconds": 6,
+      "transition": "bleed",
+      "cast": [
+        "porch",
+        "lolo_memory",
+        "migo_11"
+      ],
+      "beat": "Memory, age 11: Lolo gave him his first tablet. Migo hugged him.",
+      "frame": {
+        "framing": "medium",
+        "subject": "Lolo seated in his rattan chair on the LEFT; 11-year-old Migo standing on the RIGHT holding an unwrapped new tablet, newspaper wrapping torn open on the floor",
+        "action": "Migo throws his arms around Lolo in a big happy hug, the tablet still in one hand",
+        "setting": "the same front porch, a bright afternoon",
+        "light": "memory haze",
+        "camera": "static",
+        "motion": "Migo hugs Lolo tightly, Lolo laughs and pats his back"
+      },
+      "sfx": [],
+      "ambience": "street_afternoon"
+    },
+    {
+      "id": "s09",
+      "act": 2,
       "beat": "Memory: they were inseparable. Lolo teaching him chess, both laughing.",
-      "frame": { "framing": "medium", "subject": "Lolo seated in his rattan chair on the LEFT with 8-year-old Migo on his lap, both leaning over the chessboard", "action": "Lolo guides the boy's small hand to move the white knight, and both burst out laughing", "setting": "the same front porch years earlier, bright afternoon", "light": "memory haze", "camera": "static", "motion": "their hands move the knight together, the boy throws his head back laughing, Lolo's shoulders shake with laughter" },
-      "sfx": [], "ambience": "street_afternoon" },
-    { "id": "s10", "act": 2, "seconds": 5, "transition": "bleed", "cast": ["lolo_memory", "migo_5"],
+      "seconds": 6,
+      "transition": "bleed",
+      "cast": [
+        "porch",
+        "lolo_memory",
+        "migo_8"
+      ],
+      "frame": {
+        "framing": "medium",
+        "subject": "Lolo seated in his rattan chair on the LEFT with 8-year-old Migo on his lap, both leaning over the chessboard",
+        "action": "Lolo guides the boy's small hand to move the white knight, and both burst out laughing",
+        "setting": "the same front porch years earlier, bright afternoon",
+        "light": "memory haze",
+        "camera": "static",
+        "motion": "their hands move the knight together, the boy throws his head back laughing, Lolo's shoulders shake with laughter"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [],
+      "ambience": "street_afternoon"
+    },
+    {
+      "id": "s09a",
+      "act": 2,
+      "seconds": 6,
+      "transition": "bleed",
+      "cast": [
+        "house_ext",
+        "lolo_memory",
+        "migo_8"
+      ],
+      "beat": "Memory, age 7: Lolo running behind his first bicycle.",
+      "frame": {
+        "framing": "wide",
+        "subject": "On the quiet street in front of the house, young Migo riding a small red bicycle in the centre, Lolo just behind him holding the back of the seat, both moving toward the RIGHT",
+        "action": "Lolo lets go of the seat and Migo pedals on alone for the first time, Lolo raising his hands in joy",
+        "setting": "the barangay street in front of the house, golden afternoon, bougainvillea at the gate",
+        "light": "memory haze",
+        "camera": "static",
+        "motion": "the bicycle rolls slowly forward, Lolo lets go and lifts his hands, the boy wobbles then keeps going"
+      },
+      "sfx": [],
+      "ambience": "street_afternoon"
+    },
+    {
+      "id": "s10",
+      "act": 2,
       "beat": "Memory: the fiesta, on Lolo's shoulders.",
-      "frame": { "framing": "medium", "subject": "Lolo standing in the centre with 5-year-old Migo riding on his shoulders, both facing the camera", "action": "the boy holds a pink cotton candy down toward Lolo's mouth, both grinning", "setting": "a small-town plaza fiesta at night, colourful triangular banderitas strung overhead, soft glowing string lights and a blurred crowd far behind", "light": "memory haze", "camera": "static", "motion": "the banderitas flutter, the boy wiggles happily, Lolo bobs gently as if walking in place" },
-      "sfx": [], "ambience": "fiesta" },
-    { "id": "s11", "act": 2, "seconds": 4, "transition": "bleed", "cast": ["porch", "lolo_memory"],
+      "seconds": 6,
+      "transition": "bleed",
+      "cast": [
+        "lolo_memory",
+        "migo_5"
+      ],
+      "frame": {
+        "framing": "medium",
+        "subject": "Lolo standing in the centre with 5-year-old Migo riding on his shoulders, both facing the camera",
+        "action": "the boy holds a pink cotton candy down toward Lolo's mouth, both grinning",
+        "setting": "a small-town plaza fiesta at night, colourful triangular banderitas strung overhead, soft glowing string lights and a blurred crowd far behind",
+        "light": "memory haze",
+        "camera": "static",
+        "motion": "the banderitas flutter, the boy wiggles happily, Lolo bobs gently as if walking in place"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [],
+      "ambience": "fiesta"
+    },
+    {
+      "id": "s10a",
+      "act": 2,
+      "seconds": 6,
+      "transition": "bleed",
+      "cast": [
+        "porch",
+        "lolo_memory",
+        "migo_2"
+      ],
+      "beat": "Memory, age 2: his first steps, holding Lolo's fingers.",
+      "frame": {
+        "framing": "medium",
+        "subject": "On the porch floorboards, toddler Migo in the centre taking wobbly steps, each tiny hand holding one of Lolo's fingers; Lolo crouching behind him, beaming",
+        "action": "the toddler takes a few careful steps forward",
+        "setting": "the same front porch, a soft warm morning",
+        "light": "memory haze",
+        "camera": "static",
+        "motion": "the toddler takes small wobbly steps, Lolo shuffles behind holding his hands, both smiling"
+      },
+      "sfx": [],
+      "ambience": "house_quiet"
+    },
+    {
+      "id": "s11",
+      "act": 2,
       "beat": "Memory: the beginning. A baby asleep on his chest.",
-      "frame": { "framing": "close-up", "subject": "Lolo dozing in his rattan chair on the LEFT with a sleeping baby boy lying on his chest, his big hand resting on the baby's back", "action": "both asleep, breathing together", "setting": "the same front porch, a warm quiet afternoon", "light": "memory haze", "camera": "slow push-in", "motion": "their chests rise and fall slowly together, a curtain of light shifts softly" },
-      "sfx": [], "ambience": "house_quiet" },
-    { "id": "s12", "act": 3, "seconds": 6, "transition": "bleed", "cast": ["lolo_room", "migo_13", "tin"],
+      "seconds": 6,
+      "transition": "bleed",
+      "cast": [
+        "porch",
+        "lolo_memory"
+      ],
+      "frame": {
+        "framing": "close-up",
+        "subject": "Lolo dozing in his rattan chair on the LEFT with a sleeping baby boy lying on his chest, his big hand resting on the baby's back",
+        "action": "both asleep, breathing together",
+        "setting": "the same front porch, a warm quiet afternoon",
+        "light": "memory haze",
+        "camera": "slow push-in",
+        "motion": "their chests rise and fall slowly together, a curtain of light shifts softly"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [],
+      "ambience": "house_quiet"
+    },
+    {
+      "id": "s12",
+      "act": 3,
       "beat": "In Lolo's room: a gift wrapped in newspaper, and a tin full of saved coins.",
-      "frame": { "framing": "medium", "subject": "Migo standing in the doorway on the LEFT, headset around his neck, looking at the bed on the RIGHT; on the white bed cover a box wrapped in old newspaper tied with red yarn, and beside it the open royal-blue cookie tin full of coins", "action": "he stands still, staring at the gift and the coins", "setting": "Lolo's quiet bedroom, the altar shelf and the capiz window behind", "light": "absence", "camera": "slow push-in", "motion": "dust floats in the window light, Migo's fingers tighten on the door frame" },
-      "sfx": [], "ambience": "dusk_empty" },
-    { "id": "s13", "act": 3, "seconds": 6, "transition": "fade", "cast": ["phone", "migo_13"],
+      "seconds": 7,
+      "transition": "bleed",
+      "cast": [
+        "lolo_room",
+        "migo_13",
+        "tin"
+      ],
+      "frame": {
+        "framing": "medium",
+        "subject": "Migo standing in the doorway on the LEFT, headset around his neck, looking at the bed on the RIGHT; on the white bed cover a box wrapped in old newspaper tied with red yarn, and beside it the open royal-blue cookie tin full of coins",
+        "action": "he stands still, staring at the gift and the coins",
+        "setting": "Lolo's quiet bedroom, the altar shelf and the capiz window behind",
+        "light": "absence",
+        "camera": "slow push-in",
+        "motion": "dust floats in the window light, Migo's fingers tighten on the door frame"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [],
+      "ambience": "dusk_empty"
+    },
+    {
+      "id": "s13",
+      "act": 3,
       "beat": "The reveal: Lolo installed Migo's game. His little avatar is waiting alone in the lobby.",
-      "frame": { "framing": "extreme close-up", "subject": "Migo's hands with the charcoal hoodie sleeves holding Lolo's old phone with the cracked corner; the phone screen fills the centre of the frame", "action": "the screen shows a colourful stylised video-game lobby with one tiny cute avatar wearing a straw salakot hat, standing all alone, waiting", "setting": "Lolo's bedroom, soft window light on the hands", "light": "absence", "camera": "static", "motion": "the tiny avatar on the screen gently bobs and waves, the boy's thumbs tremble slightly" },
-      "override": { "still": "", "motion": "" },
-      "sfx": [{ "prompt": "tiny tinny cheerful video game lobby music playing quietly from a small phone speaker", "offset": 0.5 }], "ambience": "dusk_empty" },
-    { "id": "s14", "act": 3, "seconds": 4, "transition": "cut", "cast": ["migo_13", "lolo_room"],
+      "seconds": 8,
+      "transition": "fade",
+      "cast": [
+        "phone",
+        "migo_13"
+      ],
+      "frame": {
+        "framing": "extreme close-up",
+        "subject": "Migo's hands with the charcoal hoodie sleeves holding Lolo's old phone with the cracked corner; the phone screen fills the centre of the frame",
+        "action": "the screen shows a colourful stylised video-game lobby with one tiny cute avatar wearing a straw salakot hat, standing all alone, waiting",
+        "setting": "Lolo's bedroom, soft window light on the hands",
+        "light": "absence",
+        "camera": "static",
+        "motion": "the tiny avatar on the screen gently bobs and waves, the boy's thumbs tremble slightly"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [
+        {
+          "prompt": "tiny tinny cheerful video game lobby music playing quietly from a small phone speaker",
+          "offset": 0.5
+        }
+      ],
+      "ambience": "dusk_empty"
+    },
+    {
+      "id": "s14",
+      "act": 3,
       "beat": "He understands. Lolo was trying to come into his world.",
-      "frame": { "framing": "close-up", "subject": "Migo's face and shoulders, centred, warm window light on the LEFT side of his face and the phone's blue glow on the RIGHT", "action": "tears roll down his cheeks as he presses the phone to his chest", "setting": "Lolo's bedroom, softly out of focus behind him", "light": "split light", "camera": "static", "motion": "a tear rolls down his cheek, his lips tremble, his hands press the phone to his chest" },
-      "sfx": [], "ambience": "dusk_empty" },
-    { "id": "s15", "act": 3, "seconds": 7, "transition": "bleed", "cast": ["porch", "migo_13", "chessboard"],
+      "seconds": 7,
+      "transition": "cut",
+      "cast": [
+        "migo_13",
+        "lolo_room"
+      ],
+      "frame": {
+        "framing": "close-up",
+        "subject": "Migo's face and shoulders, centred, warm window light on the LEFT side of his face and the phone's blue glow on the RIGHT",
+        "action": "tears roll down his cheeks as he presses the phone to his chest",
+        "setting": "Lolo's bedroom, softly out of focus behind him",
+        "light": "split light",
+        "camera": "static",
+        "motion": "a tear rolls down his cheek, his lips tremble, his hands press the phone to his chest"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [],
+      "ambience": "dusk_empty"
+    },
+    {
+      "id": "s15",
+      "act": 3,
       "beat": "His move. Finally.",
-      "frame": { "framing": "medium", "subject": "Migo seated in HIS rattan chair on the RIGHT, the unopened newspaper-wrapped gift on the floor beside him; across the chessboard, Lolo's empty rattan chair on the LEFT with the folded reading glasses resting on its seat", "action": "he reaches out and gently moves a black piece, then leaves his hand resting near the chipped white knight", "setting": "the front porch at sunset, bougainvillea petals drifting", "light": "sunset", "camera": "static", "motion": "his hand slowly moves the black piece and rests, bougainvillea petals drift down, his shoulders settle" },
-      "sfx": [{ "prompt": "a single wooden chess piece set down on a wooden board, a soft click", "offset": 2.5 }], "ambience": "evening_birds" },
-    { "id": "s16", "act": 3, "seconds": 6, "transition": "fade", "cast": ["house_ext"],
+      "seconds": 9,
+      "transition": "bleed",
+      "cast": [
+        "porch",
+        "migo_13",
+        "chessboard"
+      ],
+      "frame": {
+        "framing": "medium",
+        "subject": "Migo seated in HIS rattan chair on the RIGHT, the unopened newspaper-wrapped gift on the floor beside him; across the chessboard, Lolo's empty rattan chair on the LEFT with the folded reading glasses resting on its seat",
+        "action": "he reaches out and gently moves a black piece, then leaves his hand resting near the chipped white knight",
+        "setting": "the front porch at sunset, bougainvillea petals drifting",
+        "light": "sunset",
+        "camera": "static",
+        "motion": "his hand slowly moves the black piece and rests, bougainvillea petals drift down, his shoulders settle"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [
+        {
+          "prompt": "a single wooden chess piece set down on a wooden board, a soft click",
+          "offset": 2.5
+        }
+      ],
+      "ambience": "evening_birds"
+    },
+    {
+      "id": "s16",
+      "act": 3,
       "beat": "The house at sunset: the porch glows, the upstairs window is dark.",
-      "frame": { "framing": "wide", "subject": "The same old two-storey house seen from across the street, centred; the porch glows warm with one small figure sitting there; the upstairs right window is DARK, the screen off", "action": "stillness at the end of the day", "setting": "the quiet barangay street at sunset", "light": "sunset", "camera": "slow pull-back", "motion": "the bougainvillea sways, a bird crosses the coral sky, the porch light glows" },
-      "sfx": [], "ambience": "evening_birds" }
+      "seconds": 8,
+      "transition": "fade",
+      "cast": [
+        "house_ext"
+      ],
+      "frame": {
+        "framing": "wide",
+        "subject": "The same old two-storey house seen from across the street, centred; the porch glows warm with one small figure sitting there; the upstairs right window is DARK, the screen off",
+        "action": "stillness at the end of the day",
+        "setting": "the quiet barangay street at sunset",
+        "light": "sunset",
+        "camera": "slow pull-back",
+        "motion": "only the bougainvillea sways gently and a single bird crosses the coral sky; the upstairs windows stay completely dark and empty, no one appears in any window, no new people; the small figure on the porch stays still"
+      },
+      "override": {
+        "still": "",
+        "motion": ""
+      },
+      "sfx": [],
+      "ambience": "evening_birds"
+    }
   ],
   "music": {
     "preset": "felt-piano-melancholy",
     "prompt": "Wordless animated short film score: soft felt piano with a gentle Filipino kulintang-like metallic gong texture and warm strings, tender, nostalgic, restrained, no drums, no vocals, slow tempo around 60 bpm. A small playful four-note motif represents the grandfather's knock; it repeats and grows sparser and quieter each time.",
     "shape": [
-      { "from": 0, "to": 16, "mood": "a light playful motif, the knock theme, warm and gentle" },
-      { "from": 16, "to": 32, "mood": "the motif repeats slower and sparser, rain, a little lonely" },
-      { "from": 32, "to": 38, "mood": "the music stops completely: silence" },
-      { "from": 38, "to": 53, "mood": "memories: the motif as a warm glowing lullaby with strings" },
-      { "from": 53, "to": 69, "mood": "the reveal: fragile solo piano, the motif returns slowly and breaks" },
-      { "from": 69, "to": 90, "mood": "the move: gentle resolution, strings swell softly, ends on one sustained piano note" }
+      {
+        "from": 0,
+        "to": 36,
+        "mood": "a light playful four-note motif, the knock theme, warm and gentle, repeating"
+      },
+      {
+        "from": 36,
+        "to": 62,
+        "mood": "the motif slower and sparser, rain, lonely; a quiet uneasy note at night"
+      },
+      {
+        "from": 62,
+        "to": 70,
+        "mood": "the music drops away to near silence as the emergency lights pulse"
+      },
+      {
+        "from": 70,
+        "to": 90,
+        "mood": "silence, then a single low sustained piano note at the wake"
+      },
+      {
+        "from": 90,
+        "to": 128,
+        "mood": "memories: the motif as a warm glowing lullaby with strings, building gently"
+      },
+      {
+        "from": 128,
+        "to": 150,
+        "mood": "the reveal: fragile solo piano, the motif returns slowly and breaks"
+      },
+      {
+        "from": 150,
+        "to": 172,
+        "mood": "the move: gentle resolution, strings swell softly, ends on one sustained piano note"
+      }
     ]
   }
 }

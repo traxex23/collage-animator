@@ -89,7 +89,9 @@ export async function mixAudio(slug, t, outName = 'mix.m4a') {
   const add = f => (inputs.push('-i', dir(slug, f)), inputs.length / 2 - 1);
   if (t.music) {
     const m = add(t.music);
-    filters.push(`[${m}]${fmt},atrim=0:${D},afade=t=in:d=1.0,afade=t=out:st=${Math.max(0, D - 4)}:d=4,volume=0.9[mus]`); labels.push('[mus]');
+    // A score a little shorter than the film is stretched (pitch-preserving, at most 8%) so it doesn't stop early.
+    const len = await probeDuration(dir(slug, t.music)), tempo = len < D - 1 ? Math.max(0.92, len / (D - 1)) : 1;
+    filters.push(`[${m}]${fmt}${tempo < 1 ? `,atempo=${tempo.toFixed(4)}` : ''},atrim=0:${D},afade=t=in:d=1.0,afade=t=out:st=${Math.max(0, D - 4)}:d=4,volume=0.9[mus]`); labels.push('[mus]');
   }
   t.amb.forEach(([f, from, to, vol], k) => {
     const i = add(f), len = Math.max(0.5, to - from), fd = Math.min(1.5, len / 3);

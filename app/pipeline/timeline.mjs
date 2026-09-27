@@ -2,7 +2,8 @@
 import fs from 'node:fs';
 import { dir } from '../lib/projects.mjs';
 
-const TRANS_DUR = { none: 0, fade: 1.2, cut: 0.2, bleed: 1.4, knot: 1.5 };
+// Short transitions: long dissolves stack two shots on top of each other and read as blurry "ghost" frames.
+const TRANS_DUR = { none: 0, fade: 0.6, cut: 0.15, bleed: 0.9, knot: 1.2 };
 const TAIL = 4.5;   // end-card on black
 
 // Shot i starts at the sum of the previous shots' seconds; its entry transition overlaps the previous shot.

@@ -27,6 +27,7 @@ patch("drawTitle(ctx, 'The Long String', t, E.in, 0, H * 0.46, 92, '', '236,222,
 patch("new Audio('../out/v2-mix.m4a')", "new Audio(BASE + 'out/mix.m4a')");
 patch('<title>The Long String</title>', '<title>Film preview</title>');
 patch('if (FRAME_CACHE.size > 90)', 'if (FRAME_CACHE.size > 16)');   // 1080p frames are ~8 MB decoded each
+patch('  const rate = Math.min(1, avail / (b - a));', '  // Play near real speed (heavy slow-motion stutters), then hold the last frame; the camera push keeps a hold alive.\n  const rate = Math.max(0.85, Math.min(1, avail / (b - a)));');
 
 fs.mkdirSync('engine', { recursive: true });
 fs.writeFileSync('engine/index.html', h);
