@@ -1,0 +1,17 @@
+[
+  { "id": "watercolor-storybook", "name": "Watercolor storybook",
+    "about": "Faded watercolor and soft pencil, like a vintage European picture book (The House of Small Cubes).",
+    "style": "Hand-painted storybook illustration in the style of a vintage European picture book: soft faded watercolor washes, delicate graphite pencil linework visible under the paint, grainy textured cold-press paper, muted desaturated palette of sepia, dusty teal, pale ochre and faint rose, gentle melancholic nostalgic mood, quiet negative space, hand-drawn imperfection. No text, no letters, no words, no watermark, no border." },
+  { "id": "cut-paper-collage", "name": "Cut-paper collage",
+    "about": "Whimsical hand-made collage of torn paper, fabric and pencil, like the Reddit example.",
+    "style": "Whimsical hand-made collage illustration: torn and cut paper shapes, visible paper edges and slight shadows, old book pages, fabric and newsprint textures, pencil and crayon doodles on top, warm playful palette, handcrafted imperfection. No text, no letters, no watermark, no border." },
+  { "id": "ink-wash", "name": "Ink and wash",
+    "about": "Loose black ink lines with grey and one accent color wash.",
+    "style": "Loose expressive ink-and-wash illustration: confident black ink brush lines, soft grey washes, a single restrained accent color, rice-paper texture, lots of white space, poetic and quiet. No text, no letters, no watermark, no border." },
+  { "id": "pastel-crayon", "name": "Soft pastel crayon",
+    "about": "Chalky pastels on toned paper. Soft, warm and childlike.",
+    "style": "Soft chalk pastel and wax crayon drawing on toned paper, visible grainy strokes, gentle warm colors, soft edges, childlike warmth and nostalgia. No text, no letters, no watermark, no border." },
+  { "id": "gouache-retro", "name": "Retro gouache",
+    "about": "Mid-century gouache illustration with flat shapes and dry-brush texture.",
+    "style": "Mid-century retro gouache illustration: flat matte color shapes, dry-brush texture, limited warm palette, simple stylised characters, subtle paper grain, cozy vintage feel. No text, no letters, no watermark, no border." }
+]

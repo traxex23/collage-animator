@@ -1,0 +1,23 @@
+# Secrets
+.env
+
+# Dependencies
+node_modules/
+
+# Generated films and media (large; regenerate with the app)
+projects/
+out/
+assets/
+film/img/
+film2/img/
+film3/clips/
+*.mp4
+*.mp3
+*.m4a
+*.wav
+*.png
+*.jpg
+*.jpeg
+
+# Local tool settings
+.claude/
