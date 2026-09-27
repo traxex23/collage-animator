@@ -1,6 +1,6 @@
 // Venice API: text, images (generate + multi-edit), music/SFX (async queue).
 import fs from 'node:fs';
-import { env, sleep, fileToDataUrl, mimeOf } from '../lib/core.mjs';
+import { env, sleep, fileToDataUrl, ffmpeg } from '../lib/core.mjs';
 
 const BASE = 'https://api.venice.ai/api/v1';
 const headers = () => ({ Authorization: `Bearer ${env.VENICE_API_KEY}`, 'Content-Type': 'application/json' });
@@ -28,8 +28,18 @@ export async function generateImage({ model, prompt, aspect, res }) {
   return { buf: Buffer.from(j.images[0], 'base64') };
 }
 
+// Full-size PNG references (~8 MB each) overflow Venice's request limit when 3 are sent,
+// so a 1536px JPEG copy is cached next to each reference and sent instead.
+async function compact(file) {
+  const out = file.replace(/\.\w+$/, '.ref.jpg');
+  if (!fs.existsSync(out) || fs.statSync(out).mtimeMs < fs.statSync(file).mtimeMs) {
+    await ffmpeg(['-i', file, '-vf', "scale='min(1536,iw)':-2", '-q:v', '3', out]);
+  }
+  return out;
+}
+
 export async function editImage({ model, prompt, refs, aspect, res }) {
-  const images = refs.slice(0, 3).map(f => fileToDataUrl(f, mimeOf(f)));
+  const images = await Promise.all(refs.slice(0, 3).map(async f => fileToDataUrl(await compact(f), 'image/jpeg')));
   const r = await call('/image/multi-edit', { modelId: model, prompt, images, aspect_ratio: aspect, resolution: res, output_format: 'png', safe_mode: false }, { raw: true });
   return { buf: Buffer.from(await r.arrayBuffer()) };
 }

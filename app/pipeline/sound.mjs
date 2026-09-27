@@ -49,7 +49,8 @@ export async function makeMusic(p) {
   const est = await providers.estimate(p.settings, 'music');
   const id = charge(p.slug, 'venice', 'music score', est);
   try {
-    const r = await providers.audio(p.settings, { kind: 'music', prompt: musicPrompt(p), duration: Math.round(layout(p).duration) });
+    // Lyria takes its length from the prompt (it rejects duration_seconds); musicPrompt() states the film's length.
+    const r = await providers.audio(p.settings, { kind: 'music', prompt: musicPrompt(p) });
     fs.writeFileSync(musicFile(p), r.buf);
   } catch (e) { refund(p.slug, id); throw e; }
   return probeDuration(musicFile(p));
