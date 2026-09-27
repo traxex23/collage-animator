@@ -16,9 +16,11 @@ export async function generateImage({ prompt, aspect }) {
 }
 export const editImage = generateImage;
 
-export async function video({ image, seconds }) {
+export async function video({ image, seconds, aspect }) {
+  const [w, h] = aspect === '9:16' ? [704, 1280] : [1280, 704];
   return { buf: await readTmp('mp4', ['-loop', '1', '-i', image, '-vf',
-    `scale=1280:-2,zoompan=z='1+0.0015*on':d=${Math.round(seconds * 24)}:s=1280x704:fps=24`, '-t', String(seconds), '-pix_fmt', 'yuv420p']) };
+    `scale=${w}:${h}:force_original_aspect_ratio=increase,crop=${w}:${h},zoompan=z='1+0.0015*on':d=${Math.round(seconds * 24)}:s=${w}x${h}:fps=24`,
+    '-t', String(seconds), '-pix_fmt', 'yuv420p']) };
 }
 
 export async function audio({ prompt, duration = 60 }) {
