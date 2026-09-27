@@ -8,7 +8,7 @@ import { STYLES } from './story.mjs';
 import { compileStill, compileMotion, compileSketch, hash } from './prompts.mjs';
 
 export const styleOf = p => (STYLES.find(s => s.id === p.settings.style) || STYLES[0]).style;
-export const variants = p => Object.fromEntries((p.story?.characters || []).flatMap(c => c.variants.map(v => [v.id, { ...v, name: c.name }])));
+export const variants = p => Object.fromEntries((p.story?.characters || []).flatMap(c => c.variants.map(v => [v.id, { ...v, name: c.name, kind: c.kind || 'character' }])));
 
 export const castFile = (p, vid) => dir(p.slug, 'cast', `${vid}.png`);
 export const sketchFile = (p, sid) => dir(p.slug, 'sketches', `${sid}.png`);
@@ -20,7 +20,7 @@ export const clipSeconds = shot => Math.min(10, Math.max(5, Math.ceil(shot.secon
 export function promptsFor(p, shot) {
   const vs = variants(p), withRefs = shot.cast.some(id => fs.existsSync(castFile(p, id)));
   return {
-    still: compileStill(shot, { variants: vs, style: styleOf(p), withRefs }),
+    still: compileStill(shot, { variants: vs, style: styleOf(p), withRefs, palette: p.story?.palette }),
     motion: compileMotion(shot),
     sketch: compileSketch(shot, { variants: vs }),
   };
@@ -50,8 +50,14 @@ async function paid(p, provider, what, usd, fn) {
 // ---------- cast ----------
 export async function castSheet(p, vid) {
   const v = variants(p)[vid];
-  const prompt = `Character reference sheet on plain cream paper: ${v.name}, ${v.look} Show this one character three times side by side: ` +
-    `front view, three-quarter view, and side view, full body, evenly spaced, neutral pose. Only this one character.\n\n${styleOf(p)}`;
+  const prompt = {
+    character: `Character reference sheet on plain cream paper: ${v.name}, ${v.look} Show this one character three times side by side: ` +
+      'front view, three-quarter view, and side view, full body, evenly spaced, neutral pose. Only this one character.',
+    place: `Location design painting for an animated film: ${v.name}. ${v.look} An empty establishing view with no people, showing the ` +
+      'whole space clearly, its layout, furniture, materials and light sources, as the reference for every shot set here.',
+    prop: `Prop design sheet on plain cream paper: ${v.name}. ${v.look} Show this one object three times: front, three-quarter and top view, ` +
+      'evenly spaced, clear details. Only this object.',
+  }[v.kind] + `\n\n${styleOf(p)}`;
   const est = await providers.estimate(p.settings, 'image');
   const r = await paid(p, p.settings.image.provider, `cast ${vid}`, est, () => providers.generateImage(p.settings, prompt, { aspect: '16:9' }));
   backup(castFile(p, vid));
@@ -121,6 +127,22 @@ export async function extractFrames(p, sid, { fromStill = false } = {}) {
   }
   const src = clipFile(p, sid);
   await ffmpeg(['-i', src, '-vf', scale, '-q:v', '2', `${out}/f%04d.jpg`]);
+  await qaSheet(p, sid, out);
+}
+
+// Animatic frame: the best picture a shot has so far (painting, else sketch), held for the whole shot.
+export async function animaticFrames(p, sid) {
+  const src = [stillFile(p, sid), sketchFile(p, sid)].find(f => fs.existsSync(f));
+  if (!src) throw new Error(`Shot ${sid} has no sketch yet`);
+  const out = dir(p.slug, 'frames', `anim_${sid}`);
+  fs.rmSync(out, { recursive: true, force: true }); fs.mkdirSync(out, { recursive: true });
+  const scale = p.settings.aspect === '9:16' ? 'scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920' : 'scale=1920:1080:force_original_aspect_ratio=increase,crop=1920:1080';
+  await ffmpeg(['-i', src, '-vf', scale, '-q:v', '3', `${out}/f0001.jpg`]);
+  fs.writeFileSync(`${out}/info.json`, JSON.stringify({ frames: 1, fps: 24, still: true }));
+}
+
+async function qaSheet(p, sid, out) {
+  const vertical = p.settings.aspect === '9:16', src = clipFile(p, sid);
   const frames = fs.readdirSync(out).filter(f => f.endsWith('.jpg')).length;
   const fps = Math.round(frames / await probeDuration(src)) || 24;   // clips report a bogus 90000 r_frame_rate
   fs.writeFileSync(`${out}/info.json`, JSON.stringify({ frames, fps }));

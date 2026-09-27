@@ -232,8 +232,13 @@ function chips(s) {
 function renderPlan(el) {
   const p = S.p, st = p.story, v = p.view;
   if (!st) { el.innerHTML = `<section class="card pad empty"><h2>Your idea</h2><p>${esc(p.theme)}</p></section>`; return; }
-  const cast = st.characters.flatMap(c => c.variants.map(x => ({ ...x, name: c.name })));
+  const cast = st.characters.flatMap(c => c.variants.map(x => ({ ...x, name: c.name, kind: c.kind || 'character' })));
   const files = Object.fromEntries(v.cast.map(c => [c.id, c.file]));
+  const KINDS = [['character', 'Characters'], ['place', 'Places'], ['prop', 'Props']];
+  const refCard = x => `<div class="card cast-card">${thumb(fileUrl(`cast/${x.id}.png`, files[x.id]), files[x.id], 'not drawn yet')}
+    <div class="body"><b>${esc(x.name)}</b> <span class="tag">${esc(x.id)}</span><textarea data-look="${x.id}" rows="3">${esc(x.look)}</textarea>
+    <button class="small" data-needs-idle data-redraw="${x.id}">${files[x.id] ? 'Redraw' : 'Draw'}</button></div></div>`;
+  const palette = Object.entries(st.palette || {});
   const plan = v.plan, row = (l, r) => `<tr><td>${l}</td><td>${r.n ? plural(r.n, 'item') : '<span class="muted">done</span>'}</td><td class="num">${money(r.usd)}</td></tr>`;
   el.innerHTML = `
   <section class="card pad">
@@ -243,10 +248,12 @@ function renderPlan(el) {
     <div class="row"><input type="text" id="note" placeholder="Want changes? e.g. make the twist stronger, add a dog, shorter memories"><button data-needs-idle id="rewrite">Rewrite</button></div>
   </section>
 
-  <h3 class="section">Characters</h3>
-  <div class="cast">${cast.map(x => `<div class="card cast-card">${thumb(fileUrl(`cast/${x.id}.png`, files[x.id]), files[x.id], 'not drawn yet')}
-    <div class="body"><b>${esc(x.name)}</b> <span class="tag">${esc(x.id)}</span><textarea data-look="${x.id}" rows="3">${esc(x.look)}</textarea>
-    <button class="small" data-needs-idle data-redraw="${x.id}">${files[x.id] ? 'Redraw' : 'Draw'}</button></div></div>`).join('')}</div>
+  ${palette.length ? `<h3 class="section">Colour script <span class="muted small">this film's lights</span></h3>
+  <section class="card pad"><table class="costs">${palette.map(([k, x]) => `<tr><td><span class="tag ${x.grade}">${esc(k)}</span></td>
+    <td class="small">${esc(x.words)}</td><td class="num muted small">used in ${st.shots.filter(s => s.frame.light === k).length} shots</td></tr>`).join('')}</table></section>` : ''}
+
+  <h3 class="section">References <span class="muted small">every painting is made from these, so faces, rooms and objects stay the same</span></h3>
+  ${KINDS.filter(([k]) => cast.some(x => x.kind === k)).map(([k, label]) => `<h4>${label}</h4><div class="cast">${cast.filter(x => x.kind === k).map(refCard).join('')}</div>`).join('')}
 
   <h3 class="section">Storyboard <span class="muted small">click a shot to edit it</span></h3>
   <div class="board ${p.settings.aspect === '9:16' ? 'vertical' : ''}">${v.shots.map((s, i) => `<button class="card shot-card ${S.editing === s.id ? 'on' : ''}" data-edit="${s.id}">
@@ -254,6 +261,10 @@ function renderPlan(el) {
       <span class="badge num">${i + 1}</span></div>
     <div class="body"><div class="chips">${chips(s)}<span class="spacer"></span><span class="muted small">${s.seconds}s · ${esc(s.transition)}</span></div>
       <p class="beat">${esc(s.beat)}</p></div></button>`).join('')}</div>
+
+  ${v.final.animatic ? `<h3 class="section">Animatic <span class="muted small">the sketches at real timing: does the story work?</span></h3>
+  <section class="card pad final">${v.final.animaticStale ? '<p class="small" style="color:var(--warn)">Shots changed since this animatic. Re-render it from the Next step.</p>' : ''}
+    <video controls src="${fileUrl('out/animatic.mp4', v.final.animatic)}"></video></section>` : ''}
 
   <h3 class="section">Cost plan <span class="muted small">what's left to make, at list prices</span></h3>
   <section class="card pad"><table class="costs">
@@ -279,7 +290,8 @@ function renderDrawer() {
   const s = S.editing && S.p.view.shots.find(x => x.id === S.editing);
   if (!s) { d.innerHTML = ''; d.classList.remove('open'); return; }
   const T = S.presets.template, f = s.frame;
-  const variants = S.p.story.characters.flatMap(c => c.variants.map(x => ({ id: x.id, name: c.name })));
+  const variants = S.p.story.characters.flatMap(c => c.variants.map(x => ({ id: x.id, name: c.name, kind: c.kind || 'character' })));
+  T.light = S.p.view.lights;   // this film's colour script + defaults
   const sel = (k, list) => `<select data-f="${k}">${list.map(x => opt(x, f[k])).join('')}</select>`;
   d.innerHTML = `
   <div class="drawer-head"><b>Shot ${esc(s.id)}</b><span class="spacer"></span><button class="ghost" id="closeDrawer">✕</button></div>
@@ -296,8 +308,9 @@ function renderDrawer() {
     <div class="form-grid three">
       <div><label>Seconds</label><input type="number" data-s="seconds" min="3" max="10" step="0.5" value="${s.seconds}"></div>
       <div><label>Transition in</label><select data-s="transition">${T.transitions.map(x => opt(x, s.transition)).join('')}</select></div>
-      <div><label>Characters</label><div class="checks">${variants.map(x => `<label class="check"><input type="checkbox" data-cast="${x.id}" ${s.cast.includes(x.id) ? 'checked' : ''}> ${esc(x.id)}</label>`).join('')}</div></div>
     </div>
+    <div><label>References in this shot (max 3: characters, place, prop)</label><div class="checks cols">${variants.map(x =>
+      `<label class="check"><input type="checkbox" data-cast="${x.id}" ${s.cast.includes(x.id) ? 'checked' : ''}> ${esc(x.id)} <span class="muted small">${x.kind}</span></label>`).join('')}</div></div>
     <details><summary>Advanced: write the prompt yourself</summary>
       <label>Painting prompt override (replaces framing/subject/action/setting)</label><textarea data-o="still" rows="3">${esc(s.override?.still)}</textarea>
       <label>Motion prompt override</label><textarea data-o="motion" rows="2">${esc(s.override?.motion)}</textarea></details>
@@ -313,6 +326,7 @@ function renderDrawer() {
     $$('[data-o]', d).forEach(x => (shot.override[x.dataset.o] = x.value));
     $$('[data-s]', d).forEach(x => (shot[x.dataset.s] = x.type === 'number' ? Number(x.value) : x.value));
     shot.cast = $$('[data-cast]', d).filter(x => x.checked).map(x => x.dataset.cast);
+    if (shot.cast.length > 3) toast('Only the first 3 references are used for a painting');
     return shot;
   };
   $('#closeDrawer').onclick = () => { S.editing = null; render(); };

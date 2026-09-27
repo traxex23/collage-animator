@@ -11,6 +11,9 @@
   { "id": "pastel-crayon", "name": "Soft pastel crayon",
     "about": "Chalky pastels on toned paper. Soft, warm and childlike.",
     "style": "Soft chalk pastel and wax crayon drawing on toned paper, visible grainy strokes, gentle warm colors, soft edges, childlike warmth and nostalgia. No text, no letters, no watermark, no border." },
+  { "id": "gouache-pencil", "name": "Warm gouache & pencil",
+    "about": "Matte hand-painted gouache with soft coloured-pencil texture. Humid, sun-warmed, like a modern picture book.",
+    "style": "Hand-painted illustration for an animated short film: matte opaque gouache with soft coloured-pencil texture and gentle visible brush strokes, slightly grainy paper, warm humid tropical light, simple expressive character shapes with soft rounded forms, rich but restrained palette, tender and quiet mood, hand-made imperfection, painterly backgrounds with soft edges. No text, no letters, no numbers, no words, no watermark, no border." },
   { "id": "gouache-retro", "name": "Retro gouache",
     "about": "Mid-century gouache illustration with flat shapes and dry-brush texture.",
     "style": "Mid-century retro gouache illustration: flat matte color shapes, dry-brush texture, limited warm palette, simple stylised characters, subtle paper grain, cozy vintage feel. No text, no letters, no watermark, no border." }

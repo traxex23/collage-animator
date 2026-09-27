@@ -1,4 +1,4 @@
-// Collage Animator: local web app. Run `npm run app`, open http://127.0.0.1:5177
+﻿// Collage Animator: local web app. Run `npm run app`, open http://127.0.0.1:5177
 import fs from 'node:fs';
 import express from 'express';
 import { ROOT, PORT, BASE_URL } from './lib/core.mjs';
@@ -72,6 +72,12 @@ async function costPlan(p, shots = shotState(p)) {
   return { rows, remaining: +remaining.toFixed(2), spent: costs.summary(p.slug).total, budget: s.budget };
 }
 
+// The animatic needs (re)rendering when it's missing or older than any sketch/painting or the story timing.
+function animaticStale(p, shots) {
+  const a = stamp(store.dir(p.slug, 'out', 'animatic.mp4'));
+  return !a || shots.some(s => Math.max(s.sketch, s.still) > a) || new Date(p.storyEditedAt || 0).getTime() > a;
+}
+
 // One obvious next action per step.
 function nextStep(p, shots, plan) {
   const r = plan.rows, money = n => `~$${n.toFixed(2)}`;
@@ -80,8 +86,9 @@ function nextStep(p, shots, plan) {
   const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
   const next = {
     plan: !p.story ? { text: 'Let the writer turn your idea into a wordless screenplay with a routine, an accident, memories and a quiet reveal.', run: 'story', label: 'Write the screenplay', usd: r.story.usd }
-      : r.cast.n ? { text: `Draw ${plural(r.cast.n, 'character sheet')} so every shot keeps the same faces and clothes.`, run: 'cast', label: 'Draw characters', usd: r.cast.usd }
+      : r.cast.n ? { text: `Draw ${plural(r.cast.n, 'reference sheet')} (characters, places, props) so every shot keeps the same faces, rooms and objects.`, run: 'cast', label: 'Draw characters', usd: r.cast.usd }
       : r.sketches.n ? { text: `Sketch the storyboard: ${plural(r.sketches.n, 'rough shot')} so you can check each composition cheaply.`, run: 'sketch', label: 'Sketch storyboard', usd: r.sketches.usd }
+      : animaticStale(p, shots) ? { text: 'Watch the story as an animatic: the sketches cut together at the real timings. Free, rendered on this PC in a few minutes.', run: 'animatic', label: 'Make animatic', usd: 0 }
       : !approved('plan') ? { text: `Check the storyboard. Click any shot to edit it. Making the whole film will cost about ${money(r.stills.usd + r.clips.usd + r.sound.usd)}.`, approve: 'plan', label: 'Approve plan' }
       : { text: 'Plan approved.', go: 'make', label: 'Go to Make' },
     make: !approved('plan') ? { text: 'Approve the plan first. Nothing expensive runs before that.', go: 'plan', label: 'Go to Plan' }
@@ -112,7 +119,9 @@ async function view(p) {
         sfx: sug.sfx.map(x => ({ ...x, on: p.sound.sfx[x.key] !== false, file: stamp(sound.sfxFile(p, x.key)) })),
         amb: sug.amb.map(x => ({ ...x, on: p.sound.amb[x.key] !== false, file: stamp(sound.ambFile(p, x.key)) })),
       },
-      final: { share: stamp(store.dir(p.slug, 'out', 'share.mp4')), final: stamp(store.dir(p.slug, 'out', 'final.mp4')) },
+      final: { share: stamp(store.dir(p.slug, 'out', 'share.mp4')), final: stamp(store.dir(p.slug, 'out', 'final.mp4')),
+        animatic: stamp(store.dir(p.slug, 'out', 'animatic.mp4')), animaticStale: p.story ? animaticStale(p, shots) : false },
+      lights: Object.keys(prompts.lights(p.story?.palette)),
     },
   };
 }
@@ -138,13 +147,18 @@ app.patch('/api/projects/:slug', wrap(req => {
   return view(store.update(req.params.slug, p => {
     if (theme?.trim()) p.theme = theme.trim();
     if (settings) store.merge(p.settings, settings);
-    if (st) { p.story = story.normalize({ ...p.story, ...st }, p); store.unapproveFrom(p, 'plan'); }
+    if (st) {   // also used to import a hand-written screenplay (the full story JSON)
+      p.story = story.normalize({ ...p.story, ...st }, p); store.unapproveFrom(p, 'plan'); p.storyEditedAt = new Date().toISOString();
+      if (st.music?.prompt && !p.sound.customPrompt) p.sound.customPrompt = st.music.prompt;
+      if (st.music?.preset) p.sound.preset ||= p.story.music.preset;
+    }
     if (shot) {   // edit one shot: template fields, overrides, timing, cast
       const s = shotById(p, shot.id);
       if (shot.frame) s.frame = { ...s.frame, ...shot.frame };
       if (shot.override) s.override = { ...s.override, ...shot.override };
       for (const k of ['beat', 'seconds', 'transition', 'cast']) if (shot[k] !== undefined) s[k] = shot[k];
       p.story = story.normalize(p.story, p);
+      if (shot.seconds !== undefined || shot.transition !== undefined) p.storyEditedAt = new Date().toISOString();   // timing changed
     }
     if (snd) store.merge(p.sound, snd);
   }));
@@ -204,6 +218,13 @@ const runners = {
     await runners.cast(p, {}, ctx);
     await runners.sketch(loadP(p.slug), {}, ctx);
   },
+  // Free local preview of the whole film from sketches/paintings, to judge story and timing before paying for video.
+  async animatic(p, _, ctx) {
+    ctx.progress({ msg: 'Preparing the animatic…' });
+    for (const s of p.story.shots) await vis.animaticFrames(p, s.id);
+    timeline.build(p, { animatic: true });
+    await renderer.render(p.slug, ctx.progress, { fresh: true, kind: 'animatic' });
+  },
   async stills(p, body, ctx) {
     const shots = pick(p, body, vis.stillFile, s => vis.isStale(vis.stillFile(p, s.id), vis.promptsFor(p, s).still));
     await each(shots, 4, 'Painting shots…', ctx, s => vis.still(p, s));
@@ -247,7 +268,7 @@ const runners = {
     store.update(p.slug, q => { q.final = { renderedAt: new Date().toISOString(), duration: r.duration }; });
   },
 };
-const JOB_STEP = { story: 'plan', cast: 'plan', sketch: 'plan', plan: 'plan', stills: 'make', fix: 'make', clips: 'make', make: 'make',
+const JOB_STEP = { story: 'plan', cast: 'plan', sketch: 'plan', plan: 'plan', animatic: 'plan', stills: 'make', fix: 'make', clips: 'make', make: 'make',
   recommend: 'finish', sound: 'finish', final: 'finish' };
 
 app.post('/api/projects/:slug/run/:task', wrap(req => {

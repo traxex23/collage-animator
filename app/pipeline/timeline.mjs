@@ -16,7 +16,8 @@ export function layout(p) {
   return { scenes, duration: +(at + TAIL).toFixed(2) };
 }
 
-export function build(p) {
+// animatic: sketches/paintings as held frames (frames/anim_<id>), 12 fps, written to timeline-animatic.json.
+export function build(p, { animatic = false } = {}) {
   const { scenes, duration } = layout(p);
   const vertical = p.settings.aspect === '9:16';
   const has = f => fs.existsSync(dir(p.slug, f));
@@ -39,11 +40,11 @@ export function build(p) {
   if (run) amb.push([`audio/amb_${run.key}.mp3`, run.from, run.to, 0.3]);
 
   const t = {
-    fps: 30, duration, width: vertical ? 1080 : 1920, height: vertical ? 1920 : 1080, titleText: p.story.title,
-    scenes: scenes.map(s => ({ clip: s.shot.id, at: s.at, in: s.in, dur: s.dur, grade: s.shot.grade === 'none' ? undefined : s.shot.grade })),
+    fps: animatic ? 12 : 30, duration, width: vertical ? 1080 : 1920, height: vertical ? 1920 : 1080, titleText: p.story.title,
+    scenes: scenes.map(s => ({ clip: `${animatic ? 'anim_' : ''}${s.shot.id}`, at: s.at, in: s.in, dur: s.dur, grade: s.shot.grade === 'none' ? undefined : s.shot.grade })),
     voice: [], subs: [], sfx, amb, music: has('audio/music.mp3') ? 'audio/music.mp3' : null,
     title: { in: -10, out: -9 }, endTitle: { in: duration - 3.6, fadeBlack: duration - 4.4 },
   };
-  fs.writeFileSync(dir(p.slug, 'timeline.json'), JSON.stringify(t, null, 1));
+  fs.writeFileSync(dir(p.slug, animatic ? 'timeline-animatic.json' : 'timeline.json'), JSON.stringify(t, null, 1));
   return t;
 }

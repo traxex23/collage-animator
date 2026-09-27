@@ -15,7 +15,8 @@ let TIMELINE = null;`);
 patch('const W = 1920, H = 1080;', 'let W = 1920, H = 1080;');
 patch('async function setup() {\n',
   `async function setup() {
-  TIMELINE = window.TIMELINE = await (await fetch(BASE + 'timeline.json?' + Date.now())).json();
+  const variant = new URLSearchParams(location.search).get('timeline');   // e.g. "animatic"
+  TIMELINE = window.TIMELINE = await (await fetch(BASE + (variant ? \`timeline-\${variant}.json\` : 'timeline.json') + '?' + Date.now())).json();
   W = TIMELINE.width; H = TIMELINE.height; cv.width = W; cv.height = H; cv.style.aspectRatio = \`\${W} / \${H}\`;
 `);
 patch("await (await fetch(`clips/${s.clip}/info.json`)).json()", "await (await fetch(`${BASE}frames/${s.clip}/info.json`)).json()");

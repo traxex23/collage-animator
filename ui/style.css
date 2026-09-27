@@ -97,6 +97,7 @@ h3.section { margin: 26px 0 10px; display: flex; gap: 10px; align-items: baselin
 .form-grid.three { grid-template-columns: repeat(3, 1fr); }
 .pair { display: grid; grid-template-columns: 1fr 1.4fr; gap: 6px; }
 .checks { display: flex; flex-direction: column; gap: 4px; }
+.checks.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 12px; }
 details.advanced { border-top: 1px solid var(--line); padding-top: 12px; }
 .styles { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
 .style-opt, .rec { text-align: left; padding: 11px 13px; }

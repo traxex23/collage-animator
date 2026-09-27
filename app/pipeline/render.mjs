@@ -1,4 +1,4 @@
-// Render the engine page frame-by-frame (chunked + resumable), encode, mix audio, mux, and make a share copy.
+﻿// Render the engine page frame-by-frame (chunked + resumable), encode, mix audio, mux, and make a share copy.
 import fs from 'node:fs';
 import path from 'node:path';
 import puppeteer from 'puppeteer';
@@ -14,12 +14,12 @@ async function closeHard(browser) {
   if (proc && proc.exitCode === null) proc.kill('SIGKILL');
 }
 
-async function openPage(slug, t) {
+async function openPage(slug, t, kind = 'film') {
   const browser = await puppeteer.launch({ args: ['--js-flags=--max-old-space-size=4096'] });
   try {
     const page = await browser.newPage();
     await page.setViewport({ width: t.width, height: t.height });
-    await page.goto(`${BASE_URL}/engine/?project=${encodeURIComponent(slug)}&render`, { waitUntil: 'networkidle0', timeout: 90000 });
+    await page.goto(`${BASE_URL}/engine/?project=${encodeURIComponent(slug)}&render${kind === 'animatic' ? '&timeline=animatic' : ''}`, { waitUntil: 'networkidle0', timeout: 90000 });
     await page.evaluate(() => window.setupFilm());
     return { browser, grab: grabber(page) };
   } catch (e) { await closeHard(browser); throw e; }
@@ -40,9 +40,11 @@ export async function stills(slug, times) {
   return out;
 }
 
-export async function render(slug, progress, { fresh = false } = {}) {
-  const t = JSON.parse(fs.readFileSync(dir(slug, 'timeline.json'), 'utf8'));
-  const frames = dir(slug, 'render', 'frames');
+// kind 'animatic': sketch/painting frames at 12 fps -> out/animatic.mp4 (quick, free, for judging story and timing).
+export async function render(slug, progress, { fresh = false, kind = 'film' } = {}) {
+  const A = kind === 'animatic';
+  const t = JSON.parse(fs.readFileSync(dir(slug, A ? 'timeline-animatic.json' : 'timeline.json'), 'utf8'));
+  const frames = dir(slug, 'render', A ? 'animatic_frames' : 'frames');
   if (fresh) fs.rmSync(frames, { recursive: true, force: true });
   fs.mkdirSync(frames, { recursive: true });
   const total = Math.round(t.duration * t.fps);
@@ -54,7 +56,7 @@ export async function render(slug, progress, { fresh = false } = {}) {
     while (f < end && fs.existsSync(name(f))) f++;
     for (let attempt = 0; f < end; attempt++) {
       try {
-        s ||= await openPage(slug, t);
+        s ||= await openPage(slug, t, kind);
         for (; f < end; f++) { fs.writeFileSync(name(f), await s.grab(f / t.fps)); if (f % 30 === 0) progress({ done: f, total, msg: `Rendering frame ${f}/${total}` }); } }
       catch (e) { if (attempt > 3) throw e; console.warn('render crash, restarting browser:', e.message); await new Promise(r => setTimeout(r, 2000)); }
       if (s) await closeHard(s.browser);
@@ -62,12 +64,17 @@ export async function render(slug, progress, { fresh = false } = {}) {
     }
   }
   progress({ done: total, total, msg: 'Encoding video…' });
-  const video = dir(slug, 'out', 'video.mp4');
-  await ffmpeg(['-framerate', String(t.fps), '-i', path.join(frames, 'f%05d.jpg'), '-vf', 'unsharp=5:5:0.55:5:5:0',
-    '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-tune', 'film', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', video]);
+  const video = dir(slug, 'out', A ? 'animatic-video.mp4' : 'video.mp4');
+  await ffmpeg(['-framerate', String(t.fps), '-i', path.join(frames, 'f%05d.jpg'), ...(A ? [] : ['-vf', 'unsharp=5:5:0.55:5:5:0']),
+    '-c:v', 'libx264', '-preset', A ? 'veryfast' : 'slow', '-crf', A ? '24' : '18', '-tune', 'film', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', video]);
 
   progress({ msg: 'Mixing audio…' });
-  const mix = await mixAudio(slug, t);
+  const mix = await mixAudio(slug, t, A ? 'mix-animatic.m4a' : 'mix.m4a');
+  if (A) {
+    const out = dir(slug, 'out', 'animatic.mp4');
+    await ffmpeg(['-i', video, ...(mix ? ['-i', mix, '-map', '0:v', '-map', '1:a', '-c:a', 'copy'] : []), '-c:v', 'copy', '-shortest', out]);
+    return { final: out, duration: await probeDuration(out) };
+  }
   const final = dir(slug, 'out', 'final.mp4'), share = dir(slug, 'out', 'share.mp4');
   await ffmpeg(['-i', video, ...(mix ? ['-i', mix, '-map', '0:v', '-map', '1:a', '-c:a', 'copy'] : []), '-c:v', 'copy', '-shortest', final]);
   progress({ msg: 'Making share copy…' });
@@ -76,7 +83,7 @@ export async function render(slug, progress, { fresh = false } = {}) {
 }
 
 // Music + ambience beds + spot SFX, loudness-normalised (port of scripts/mix2.mjs).
-export async function mixAudio(slug, t) {
+export async function mixAudio(slug, t, outName = 'mix.m4a') {
   const D = t.duration, ms = s => Math.round(s * 1000), fmt = 'aformat=sample_rates=48000:channel_layouts=stereo';
   const inputs = [], filters = [], labels = [];
   const add = f => (inputs.push('-i', dir(slug, f)), inputs.length / 2 - 1);
@@ -95,7 +102,7 @@ export async function mixAudio(slug, t) {
   });
   if (!labels.length) return null;
   filters.push(`${labels.join('')}amix=inputs=${labels.length}:normalize=0,apad=whole_dur=${D},atrim=0:${D},alimiter=limit=0.9,loudnorm=I=-16:TP=-1.5:LRA=11[out]`);
-  const out = dir(slug, 'out', 'mix.m4a');
+  const out = dir(slug, 'out', outName);
   await ffmpeg([...inputs, '-filter_complex', filters.join(';'), '-map', '[out]', '-ar', '48000', '-c:a', 'aac', '-b:a', '256k', out]);
   return out;
 }
